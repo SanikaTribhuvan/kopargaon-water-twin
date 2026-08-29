@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kopargaon Shejpali Water Prioritization Digital Twin | कोपरगाव शेजपाळी जलवाटप डिजिटल ट्विन</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- KMC & Canal Division Command Header -->
+  <header class="kmc-header">
+    <div class="header-inner">
+      <div class="brand-section">
+        <div class="brand-emblem">💧</div>
+        <div class="brand-titles">
+          <h1>
+            <span data-i18n="appTitle">Kopargaon Shejpali Water Prioritization Digital Twin</span>
+            <span class="brand-tag">v3.0 Shejpali Twin</span>
+          </h1>
+          <p data-i18n="kmcHeader">Kopargaon Municipal Council & Godavari Canal Division • Scarce Water Decision OS under Maharashtra Irrigation Act, 1976</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="control-pill">
+          <span>🌦️</span>
+          <select id="seasonal-mode-select" class="mode-select" aria-label="Irrigation and Seasonal Policy Mode">
+            <option value="NORMAL">Standard Shejpali Rotation (नियमित शेजपाळी)</option>
+            <option value="SUMMER_DROUGHT">Severe Summer Crisis: Tail-End & Potable Priority</option>
+            <option value="KHARIF_ROTATION">Kharif Canal Awartan (खरीप आवर्तन)</option>
+            <option value="FESTIVAL_PALKHI">Shirdi Palkhi / Godavari Snan Lifeline</option>
+          </select>
+        </div>
+
+        <button id="lang-toggle-btn" class="lang-toggle-btn" aria-label="Toggle Language">
+          🇮🇳 मराठी (MR)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick Metrics & Canal Quota Ticker -->
+  <section class="metrics-ticker">
+    <div class="ticker-inner">
+      <div class="metric-item">
+        <span class="metric-label" data-i18n="budgetAvailable">Daily Canal Quota:</span>
+        <span id="ticker-budget-val" class="metric-val cyan">0 / 140 Cusecs (0%)</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label" data-i18n="crewsAvailable">Canal Sluice Squads:</span>
+        <span id="ticker-crews-val" class="metric-val green">4 / 4 Available</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label" data-i18n="equipmentAvailable">Mobile Lift & Tankers:</span>
+        <span id="ticker-equip-val" class="metric-val amber">5 / 5 Ready</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label" data-i18n="trustIndexTitle">Farmer Trust Index:</span>
+        <span id="ticker-trust-val" class="metric-val green">82/100</span>
+      </div>
+      <div class="metric-item">
+        <span class="metric-label">Ledger State:</span>
+        <span class="metric-val cyan">🔒 SHA-256 Verified (Maji Pauti)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Active Cascade Alert Banner (Hidden by default) -->
+  <div id="cascade-alert-banner" style="display:none; background: linear-gradient(90deg, rgba(239,68,68,0.9), rgba(185,28,28,0.95)); color:#fff; padding:10px 24px; font-size:13px; align-items:center; justify-content:center; gap:12px; box-shadow: 0 4px 15px rgba(239,68,68,0.4);">
+  </div>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" data-tab="twin" role="tab" aria-selected="true">
+        <span>🗺️</span> <span data-i18n="tabTwin">Canal & Urban Digital Twin</span>
+      </button>
+      <button class="nav-tab" data-tab="triage" role="tab" aria-selected="false">
+        <span>⚡</span> <span data-i18n="tabTriage">Shejpali Prioritization Engine</span>
+        <span class="tab-badge" id="badge-triage-count">8</span>
+      </button>
+      <button class="nav-tab" data-tab="cascade" role="tab" aria-selected="false">
+        <span>🌊</span> <span data-i18n="tabCascade">Hydraulic Network & Canal Cascade</span>
+      </button>
+      <button class="nav-tab" data-tab="xai" role="tab" aria-selected="false">
+        <span>🧠</span> <span data-i18n="tabXAI">Explainability & Counterfactuals</span>
+      </button>
+      <button class="nav-tab" data-tab="citizen" role="tab" aria-selected="false">
+        <span>🎙️</span> <span data-i18n="tabCitizen">Farmer / Citizen Voice AI Portal</span>
+      </button>
+      <button class="nav-tab" data-tab="governance" role="tab" aria-selected="false">
+        <span>📜</span> <span data-i18n="tabGovernance">Cryptographic Audit & RTI Ledger</span>
+      </button>
+      <button class="nav-tab" data-tab="timetravel" role="tab" aria-selected="false">
+        <span>⏪</span> <span data-i18n="tabTimeTravel">Historical Rotation Simulator</span>
+      </button>
+    </nav>
+
+    <!-- TAB 1: Urban & Canal Digital Twin Map View -->
+    <section id="tab-pane-twin" class="tab-content active" role="tabpanel">
+      <div class="grid-twin-layout">
+        <!-- Spatial Leaflet Map -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">
+              <span>📍</span> Kopargaon Real-Time Godavari Canal GIS & Water Network Map
+            </h2>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-run-triage" class="btn-primary">
+                <span>⚡</span> <span data-i18n="runTriageBtn">Compute Shejpali Triage</span>
+              </button>
+            </div>
+          </div>
+          <div class="map-viewport-wrapper">
+            <div id="map-container"></div>
+          </div>
+          <div style="margin-top:12px; display:flex; justify-content:space-between; font-size:11.5px; color:#94a3b8; flex-wrap:wrap; gap:10px;">
+            <div>🗺️ <strong>Layers:</strong> Godavari River Corridor • Left Bank Canal (GLBC) • Distributaries D1–D4 • Master ESRs • Farm Outlets</div>
+            <div>🚚 <strong>Fleet:</strong> 4 Patkari Sluice Squads • 50 HP Mobile Lift Pump • 3 Emergency Water Tankers</div>
+          </div>
+        </div>
+
+        <!-- Telemetry & Canal Allocation Gauge -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Telemetry & Discharge Gauge -->
+          <div class="glass-panel" style="padding:16px;">
+            <h3 class="panel-title" style="font-size:14px; margin-bottom:12px;">
+              <span>📊</span> Daily Canal Discharge Quota (140 Cusecs Max)
+            </h3>
+            <div style="height:150px; position:relative;">
+              <canvas id="budget-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Reach & Neglect Summary -->
+          <div class="glass-panel" style="padding:16px; flex:1;">
+            <h3 class="panel-title" style="font-size:14px; margin-bottom:10px;">
+              <span>🌾</span> Canal Reach & Rotational Starvation Ledger
+            </h3>
+            <div style="display:flex; flex-direction:column; gap:8px; font-size:11.5px;">
+              <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:6px; border-left:3px solid #ec4899;">
+                <strong>Ward 5: Laxmi Nagar / Ganeshnagar (Tail-End Minor 4)</strong> (410 Ha)
+                <div style="color:#ec4899; font-weight:600;">🚨 Chronic Starvation Score: 89/100 • 42 Ha Pomegranates at Wilting Risk</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:6px; border-left:3px solid #3b82f6;">
+                <strong>Ward 1: Godavari Ghat & Bet Kopargaon (Tail Minor 1)</strong> (340 Ha)
+                <div style="color:#94a3b8;">Starvation Score: 74/100 • Vegetable & Onion Seedling Nursery</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:6px; border-left:3px solid #6366f1;">
+                <strong>Ward 7: Tilak Nagar & Rural Hospital Lifeline</strong> (120 Ha)
+                <div style="color:#94a3b8;">100-Bed Sub-District Hospital & Dialysis ESR-2 (100% Water Security)</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:6px; border-left:3px solid #10b981;">
+                <strong>Ward 3: Samata Nagar & Somaiya Belt (Distributary D-2)</strong> (280 Ha)
+                <div style="color:#94a3b8;">Middle Reach • D-2 Aqueduct Crossing & Siphon Inspection</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.25); padding:8px 10px; border-radius:6px; border-left:3px solid #f59e0b;">
+                <strong>Ward 2: Bazar Peth / Commercial (Head Reach D-1)</strong> (45 Ha)
+                <div style="color:#94a3b8;">Head Reach Sugarcane (Received water 14 days ago) • Neglect: 22/100</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Shejpali Constrained Triage Board -->
+    <section id="tab-pane-triage" class="tab-content" role="tabpanel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:18px;">
+            <span>⚡</span> Shejpali Water Permit-to-Delivery Prioritization Queue
+          </h2>
+          <p style="font-size:12px; color:#94a3b8;">
+            Statutory allocation under Maharashtra Irrigation Act 1976: 140 Cusec daily rotation ceiling, 4 Patkari Gate squads, and Crop Wilting Criticality.
+          </p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button id="btn-stage-gate-override" class="btn-secondary">
+            <span>🛡️</span> <span data-i18n="overrideBtn">Stage-Gate Officer Override</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="triage-columns">
+        <!-- Batch 1: Immediate Sluice Release -->
+        <div class="triage-column">
+          <div class="col-header">
+            <span class="col-title batch1">
+              <span>🚀</span> <span data-i18n="batch1Title">Batch 1: Authorized for Immediate Canal Release</span>
+            </span>
+          </div>
+          <div id="queue-batch1" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+
+        <!-- Batch 2: Next 12h Shift -->
+        <div class="triage-column">
+          <div class="col-header">
+            <span class="col-title batch2">
+              <span>⏳</span> <span data-i18n="batch2Title">Batch 2: Scheduled for Next 12h Shift</span>
+            </span>
+          </div>
+          <div id="queue-batch2" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+
+        <!-- Deferred -->
+        <div class="triage-column">
+          <div class="col-header">
+            <span class="col-title deferred">
+              <span>⏸️</span> <span data-i18n="deferredTitle">Deferred: Quota Exceeded / Hardy Crop</span>
+            </span>
+          </div>
+          <div id="queue-deferred" style="display:flex; flex-direction:column; gap:12px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Hydraulic Cascading Failure Graph -->
+    <section id="tab-pane-cascade" class="tab-content" role="tabpanel">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">
+              <span>🌊</span> Kopargaon Hydraulic Canal & Potable Interdependency Graph
+            </h2>
+            <p style="font-size:12px; color:#94a3b8;">
+              Simulates hydraulic conveyance propagation: D-2 Siphon Breach $\to$ Tail Minor 4 Dry-out $\to$ Hospital Dialysis Deficit.
+            </p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button id="btn-sim-cascade" class="btn-danger">
+              <span>🚨</span> <span data-i18n="simCascadeBtn">Simulate D-2 Siphon Silt Breach</span>
+            </button>
+            <button id="btn-reset-cascade" class="btn-secondary">
+              <span>🔄</span> <span data-i18n="resetBtn">Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px;">
+          <!-- Canvas Graph -->
+          <div style="background:#060a12; border:1px solid var(--border-subtle); border-radius:var(--radius-md); height:500px; position:relative; overflow:hidden;">
+            <canvas id="cascade-canvas" width="900" height="500" style="width:100%; height:100%; display:block;"></canvas>
+          </div>
+
+          <!-- Inspector & Downstream Details -->
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="glass-panel" id="cascade-node-details" style="padding:14px;">
+              <h4 style="font-size:13px; font-weight:700; color:#38bdf8; margin-bottom:6px;">👆 Click Any Hydraulic Node</h4>
+              <p style="font-size:12px; color:#94a3b8;">
+                Click any canal gate or reservoir to inspect upstream discharge and downstream tail-end stress propagation.
+              </p>
+            </div>
+
+            <div class="glass-panel" style="padding:14px; flex:1;">
+              <h4 style="font-size:13px; font-weight:700; color:#fff; margin-bottom:8px;">
+                <span>🛡️</span> Canal Resilience & Preemptive Action
+              </h4>
+              <div style="font-size:12px; color:#cbd5e1; line-height:1.4;">
+                The twin automatically queues <strong>Preemptive Siphon Bypasses & Mobile Booster Pumps</strong> when hydraulic blockage risk exceeds 75%, preventing crop wilting before irreversible damage occurs.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Explainability & Counterfactual Lab -->
+    <section id="tab-pane-xai" class="tab-content" role="tabpanel">
+      <div class="xai-grid">
+        <!-- Factor Attribution & Natural Language Justification -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <span>🧠</span> Decision Justification & SHAP Factor Breakdown
+            </h3>
+          </div>
+          <div id="xai-justification-box" style="background:rgba(0,0,0,0.25); padding:14px; border-radius:var(--radius-md); margin-bottom:16px;"></div>
+          <div class="shap-chart-container">
+            <canvas id="shap-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Contrastive "Why A over B" & Opportunity Cost -->
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Contrastive -->
+          <div class="glass-panel">
+            <h3 class="panel-title" style="font-size:15px;">
+              <span>⚖️</span> Head-to-Head Contrastive Inspector ("Why Farmer A over Farmer B?")
+            </h3>
+            <div id="xai-contrastive-box" class="contrastive-panel"></div>
+          </div>
+
+          <!-- Opportunity Cost -->
+          <div class="glass-panel">
+            <h3 class="panel-title" style="font-size:15px; color:#f59e0b;">
+              <span>💰</span> <span data-i18n="opportunityCost">Agronomic & Hydraulic Trade-off Analysis</span>
+            </h3>
+            <div id="xai-opportunity-box" style="margin-top:10px;"></div>
+          </div>
+
+          <!-- Counterfactual -->
+          <div class="glass-panel">
+            <h3 class="panel-title" style="font-size:15px; color:#a855f7;">
+              <span>🔬</span> <span data-i18n="counterfactualTitle">Counterfactual Permit Explorer</span>
+            </h3>
+            <div id="xai-counterfactual-box"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Farmer Portal & Marathi Voice AI -->
+    <section id="tab-pane-citizen" class="tab-content" role="tabpanel">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+        <!-- Marathi Voice AI Portal -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <span>🎙️</span> <span data-i18n="voiceAssistantTitle">Marathi Voice-to-Triage Permit Assistant</span>
+            </h3>
+          </div>
+          
+          <div class="voice-portal-card">
+            <button id="btn-voice-record" class="mic-btn-huge" aria-label="Record Marathi Grievance">
+              🎤
+            </button>
+            <div style="font-weight:700; font-size:15px; margin-bottom:4px;">मराठीत बोला किंवा खालील नमुना निवडा</div>
+            <p style="font-size:12px; color:#94a3b8;">
+              Speak in Marathi to automatically parse canal reach, crop type, water stress, and generate a verified Shejpali permit ticket.
+            </p>
+          </div>
+
+          <div id="voice-output-card" style="display:none;"></div>
+
+          <h4 style="font-size:13px; font-weight:700; color:#cbd5e1; margin:16px 0 8px 0;">
+            Pre-Recorded Authentic Marathi Farmer Voice Samples:
+          </h4>
+          <div id="voice-samples-container" class="voice-samples-grid"></div>
+        </div>
+
+        <!-- Public Citizen Transparency Queue -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <span>📢</span> Public Shejpali Transparency Board ("Why my canal turn is scheduled")
+            </h3>
+          </div>
+          <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">
+            Farmers can see exact gate release authorization, allocated cusecs, and transparent agronomic justifications without middleman bias.
+          </p>
+          <div id="citizen-public-queue"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: Governance, Audit Chain & RTI -->
+    <section id="tab-pane-governance" class="tab-content" role="tabpanel">
+      <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:20px;">
+        <!-- Cryptographic Audit Ledger -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div>
+              <h3 class="panel-title">
+                <span>📜</span> <span data-i18n="tamperProofAudit">Cryptographic SHA-256 Sanction Ledger (Maji Pauti)</span>
+              </h3>
+              <p style="font-size:11.5px; color:#94a3b8;">
+                Append-only ledger guaranteeing that no water rotation turn is secretly diverted or skipped.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-tamper-test" class="btn-secondary" style="font-size:11.5px;">
+                <span>🧪</span> Simulate Tamper
+              </button>
+              <button id="btn-export-rti" class="btn-primary" style="font-size:11.5px;">
+                <span>📥</span> Export RTI Report
+              </button>
+            </div>
+          </div>
+
+          <div id="audit-blocks-list" class="audit-blocks-list"></div>
+        </div>
+
+        <!-- Ward Citizen Trust & Equity Radar -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <span>🎯</span> Canal Starvation vs Farmer Transparency Radar
+            </h3>
+          </div>
+          <div style="height:360px; position:relative;">
+            <canvas id="radar-canvas"></canvas>
+          </div>
+          <div style="margin-top:12px; font-size:11.5px; color:#94a3b8; line-height:1.4;">
+            Tail-end minors with high <strong>Canal Starvation</strong> scores receive automatic algorithmic equity boosts to guarantee fair distribution under Section 28 of the Maharashtra Irrigation Act.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: Time-Travel Simulator -->
+    <section id="tab-pane-timetravel" class="tab-content" role="tabpanel">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">
+              <span>⏪</span> Shejpali Historical Rotation & Policy Replay
+            </h2>
+            <p style="font-size:12px; color:#94a3b8;">
+              Replay past monsoon or summer drought canal awartans under altered policy weights to test agricultural yield outcomes retroactively.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:var(--radius-md);">
+            <h4 style="font-size:14px; font-weight:700; color:#38bdf8; margin-bottom:8px;">Historical Rotation Scenarios</h4>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px;">
+              <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; cursor:pointer;" onclick="alert('Loaded May 2024 Summer Drought Awartan (Tail-end orchard wilting emergency).')">
+                <strong>☀️ May 2024 Severe Summer Drought Awartan</strong>
+                <div style="color:#94a3b8; font-size:11.5px;">Canal discharge reduced to 90 Cusecs • Prioritized Ward 5 Pomegranates & Hospital ESR-2</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:6px; cursor:pointer;" onclick="alert('Loaded October 2024 Rabi Rotation dataset (High sugarcane & cotton competition).')">
+                <strong>🌾 October 2024 Rabi Cash Crop Awartan</strong>
+                <div style="color:#94a3b8; font-size:11.5px;">160 Cusec full canal discharge • Balanced head-reach sugarcane and tail cotton</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:var(--radius-md);">
+            <h4 style="font-size:14px; font-weight:700; color:#fff; margin-bottom:8px;">Policy Weight Tuning</h4>
+            <div style="display:flex; flex-direction:column; gap:10px; font-size:12px;">
+              <div>
+                <div style="display:flex; justify-content:space-between;"><span>Crop Water-Criticality Weight:</span> <strong>28%</strong></div>
+                <input type="range" class="cf-slider" min="5" max="50" value="28" />
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between;"><span>Rotational Equity (Days Dry):</span> <strong>22%</strong></div>
+                <input type="range" class="cf-slider" min="5" max="50" value="22" />
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between;"><span>Tail-End Vulnerability Boost:</span> <strong>20%</strong></div>
+                <input type="range" class="cf-slider" min="5" max="50" value="20" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Stage-Gate Human Override Modal -->
+  <div id="override-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">🛡️ Shejpali Stage-Gate Officer Override</h3>
+      </div>
+      <p style="font-size:12.5px; color:#cbd5e1; margin-bottom:12px;">
+        Under Maharashtra Irrigation Act governance rules, officers may alter the triage ranking, but MUST input a statutory justification permanently committed to the SHA-256 audit ledger.
+      </p>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px; color:#94a3b8;">Select Water Permit to Elevate to Batch 1:</label>
+        <select id="override-issue-select" class="modal-input"></select>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:12px; color:#94a3b8;">Authorizing Officer Name & Designation:</label>
+        <input type="text" id="override-officer-input" class="modal-input" value="Executive Engineer Shri S. Patil (Irrigation Div)" />
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px; color:#94a3b8;">Mandatory Statutory Justification (RTI Logged):</label>
+        <textarea id="override-reason-input" class="modal-input" rows="3" placeholder="e.g. Sub-District Hospital dialysis water emergency or critical tail-end tree survival mandate under Section 32."></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button id="btn-modal-cancel" class="btn-secondary">Cancel</button>
+        <button id="btn-modal-confirm" class="btn-primary">Sign & Commit Override to Blockchain</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
