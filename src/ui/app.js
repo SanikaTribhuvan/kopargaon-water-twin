@@ -1,4 +1,5 @@
 // Main Application Controller for Kopargaon Shejpali Water Prioritization Digital Twin
+import websiteVideoUrl from '../assets/website-video.mp4';
 import { WARDS, INITIAL_GRIEVANCES, SEASONAL_PRESETS, I18N, MUNICIPAL_RESOURCES } from '../data/kopargaonData.js';
 import { TriageEngine } from '../engine/triageEngine.js';
 import { CascadeEngine } from '../engine/cascadeGraph.js';
@@ -64,6 +65,9 @@ export class AppController {
       btnEnter.addEventListener('click', () => {
         splashGate.classList.add('splash-hidden');
         sessionStorage.setItem('KOPARGAON_SPLASH_DISMISSED', 'true');
+        if (this.videoElement) {
+          this.videoElement.play().catch(() => {});
+        }
       });
 
       // If already dismissed in this session, keep hidden
@@ -77,16 +81,17 @@ export class AppController {
     this.videoElement = document.getElementById('hero-bg-video');
     if (!this.videoElement) return;
 
+    this.videoElement.src = websiteVideoUrl;
     this.videoElement.muted = true;
+    this.videoElement.defaultMuted = true;
     this.videoElement.playsInline = true;
     this.videoElement.autoplay = true;
     this.videoElement.loop = true;
 
-    const tryPlay = () => {
-      const playPromise = this.videoElement.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Retry on first user interaction if browser policy requires it
+    const playVideo = () => {
+      const p = this.videoElement.play();
+      if (p !== undefined) {
+        p.catch(() => {
           document.addEventListener('click', () => {
             this.videoElement.play().catch(() => {});
           }, { once: true });
@@ -95,14 +100,13 @@ export class AppController {
     };
 
     if (this.videoElement.readyState >= 2) {
-      tryPlay();
+      playVideo();
     } else {
-      this.videoElement.addEventListener('canplay', tryPlay, { once: true });
-      this.videoElement.addEventListener('loadeddata', tryPlay, { once: true });
+      this.videoElement.addEventListener('canplay', playVideo, { once: true });
+      this.videoElement.addEventListener('loadeddata', playVideo, { once: true });
     }
 
-    // Ensure fallback play call
-    setTimeout(tryPlay, 300);
+    setTimeout(playVideo, 200);
   }
 
   initRenderers() {
@@ -271,6 +275,49 @@ export class AppController {
 
     // Live Hackathon Challenges (Challenge 1 & Challenge 2)
     this.bindChallengeEvents();
+
+    // Menu Drawer Navigation
+    this.bindMenuDrawerEvents();
+  }
+
+  bindMenuDrawerEvents() {
+    const menuBtn = document.getElementById('nav-menu-btn');
+    const drawer = document.getElementById('nav-menu-drawer');
+    const closeBtn = document.getElementById('btn-nav-menu-close');
+    const backdrop = document.getElementById('drawer-backdrop');
+    const drawerLang = document.getElementById('drawer-lang-toggle');
+
+    if (menuBtn && drawer) {
+      const openDrawer = () => {
+        drawer.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      };
+      const closeDrawer = () => {
+        drawer.style.display = 'none';
+        document.body.style.overflow = '';
+      };
+
+      menuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openDrawer();
+      });
+
+      if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+      if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+      document.querySelectorAll('.drawer-link').forEach(link => {
+        link.addEventListener('click', () => {
+          closeDrawer();
+        });
+      });
+
+      if (drawerLang) {
+        drawerLang.addEventListener('click', () => {
+          this.currentLanguage = this.currentLanguage === "en" ? "mr" : "en";
+          this.updateLanguageUI();
+        });
+      }
+    }
   }
 
   applyPhaseFilter(phase) {
