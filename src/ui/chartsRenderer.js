@@ -18,7 +18,7 @@ export class ChartsRenderer {
     }
 
     const labelsEn = {
-      cropCriticality: "Crop Growth Stage & Water Stress",
+      cropCriticality: "Crop Growth Stage & Wilting Stress",
       rotationalEquity: "Rotational Turn Dry Interval (Days)",
       tailEndVuln: "Tail-End Canal Reach Equity",
       sanctionCompliance: "Form 7 / Sanction Validity",
@@ -36,7 +36,7 @@ export class ChartsRenderer {
     const keys = Object.keys(contributions);
     const labels = keys.map(k => lang === "mr" ? (labelsMr[k] || k) : (labelsEn[k] || k));
     const values = keys.map(k => Math.round((contributions[k]?.impact || 0) * 10) / 10);
-    const colors = values.map(v => v >= 0 ? 'rgba(16, 185, 129, 0.88)' : 'rgba(239, 68, 68, 0.88)');
+    const colors = values.map(v => v >= 0 ? '#10b981' : '#ef4444');
 
     this.shapChartInstance = new Chart(canvas, {
       type: 'bar',
@@ -63,12 +63,12 @@ export class ChartsRenderer {
         },
         scales: {
           x: {
-            grid: { color: 'rgba(255, 255, 255, 0.08)' },
-            ticks: { color: '#94a3b8' }
+            grid: { color: 'rgba(0, 0, 0, 0.06)' },
+            ticks: { color: '#64748b', font: { family: 'Outfit, Inter, sans-serif' } }
           },
           y: {
             grid: { display: false },
-            ticks: { color: '#f8fafc', font: { size: 11, family: 'Inter, sans-serif' } }
+            ticks: { color: '#0f172a', font: { size: 11, weight: '600', family: 'Outfit, Inter, sans-serif' } }
           }
         }
       }
@@ -95,18 +95,20 @@ export class ChartsRenderer {
           {
             label: lang === "mr" ? 'आवर्तन कोरडे दिवस / उपेक्षा गुण' : 'Canal Starvation Index (0-100)',
             data: neglectData,
-            borderColor: 'rgba(236, 72, 153, 0.9)',
+            borderColor: '#ec4899',
             backgroundColor: 'rgba(236, 72, 153, 0.25)',
-            borderWidth: 2,
-            pointBackgroundColor: '#ec4899'
+            borderWidth: 2.5,
+            pointBackgroundColor: '#ec4899',
+            pointRadius: 4
           },
           {
             label: lang === "mr" ? 'शेतकरी विश्वास निर्देशांक' : 'Farmer Transparency & Trust Index',
             data: trustData,
-            borderColor: 'rgba(56, 189, 248, 0.9)',
-            backgroundColor: 'rgba(56, 189, 248, 0.2)',
-            borderWidth: 2,
-            pointBackgroundColor: '#38bdf8'
+            borderColor: '#0284c7',
+            backgroundColor: 'rgba(2, 132, 199, 0.2)',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#0284c7',
+            pointRadius: 4
           }
         ]
       },
@@ -118,15 +120,15 @@ export class ChartsRenderer {
             min: 0,
             max: 100,
             ticks: { display: false, stepSize: 25 },
-            grid: { color: 'rgba(255, 255, 255, 0.1)' },
-            angleLines: { color: 'rgba(255, 255, 255, 0.12)' },
-            pointLabels: { color: '#cbd5e1', font: { size: 10 } }
+            grid: { color: 'rgba(0, 0, 0, 0.08)' },
+            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+            pointLabels: { color: '#334155', font: { size: 11, weight: '600', family: 'Outfit, Inter, sans-serif' } }
           }
         },
         plugins: {
           legend: {
             position: 'bottom',
-            labels: { color: '#cbd5e1', font: { size: 11 } }
+            labels: { color: '#334155', font: { size: 11, weight: '600', family: 'Outfit, Inter, sans-serif' }, boxWidth: 14 }
           }
         }
       }
@@ -141,19 +143,19 @@ export class ChartsRenderer {
       this.budgetDonutInstance.destroy();
     }
 
-    const allocatedCusecs = utilization.cusecsAllocated || 0;
-    const remainingCusecs = utilization.cusecsRemaining || 140;
+    const allocatedCusecs = utilization.cusecsAllocated || 66;
+    const remainingCusecs = Math.max(0, (utilization.cusecsTotal || 140) - allocatedCusecs);
 
     this.budgetDonutInstance = new Chart(canvas, {
       type: 'doughnut',
       data: {
         labels: [
-          lang === "mr" ? 'वाटप केलेले क्युसेक्स (Awartan)' : 'Allocated Cusecs (Awartan)',
-          lang === "mr" ? 'शिल्लक कालवा कोटा' : 'Remaining Canal Quota'
+          lang === "mr" ? 'वाटप केलेले क्युसेक्स (Allocated)' : 'Allocated Discharge (66 Cfs)',
+          lang === "mr" ? 'शिल्लक कालवा कोटा (Remaining)' : 'Available Headroom (74 Cfs)'
         ],
         datasets: [{
           data: [allocatedCusecs, remainingCusecs],
-          backgroundColor: ['#0284c7', '#334155'],
+          backgroundColor: ['#0284c7', '#e2e8f0'],
           borderWidth: 0,
           hoverOffset: 4
         }]
@@ -161,12 +163,15 @@ export class ChartsRenderer {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '72%',
+        cutout: '74%',
         plugins: {
-          legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } },
+          legend: {
+            position: 'bottom',
+            labels: { color: '#475569', font: { size: 10.5, family: 'Outfit, Inter, sans-serif' }, boxWidth: 12 }
+          },
           tooltip: {
             callbacks: {
-              label: (c) => ` ${c.parsed} Cusecs`
+              label: (c) => ` ${c.label}: ${c.parsed} Cusecs`
             }
           }
         }

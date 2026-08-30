@@ -119,13 +119,23 @@ export class CascadeEngine {
     const criticalTargets = steps.filter(s => s.severity === "CRITICAL" && s.target !== s.source);
 
     criticalTargets.forEach((step, idx) => {
+      const wardId = this.graph.nodes.find(n => n.id === step.target)?.ward || "W5";
       tasks.push({
         id: `ANTICIPATED-${100 + idx}`,
+        permitNo: `PREEMPT-2026-${101 + idx}`,
         isPreemptive: true,
+        applicantName: "Executive Engineer (Irrigation & Emergency Bypass Unit)",
+        applicantNameMr: "कार्यकारी अभियंता (आपत्कालीन कालवा बायपास पथक)",
         title: `[Anticipated Hydraulic Cascade] Immediate Siphon Bypass on ${step.name}`,
         titleMr: `[संभाव्य जलसंकट] ${step.nameMr} वर तात्काळ आपत्कालीन बायपास`,
         category: step.target.includes("HOSP") ? "drinking_lifeline" : (step.target.includes("TAIL") ? "agriculture" : "canal_breach"),
-        wardId: this.graph.nodes.find(n => n.id === step.target)?.ward || "W5",
+        cropType: "Emergency Hydraulic Siphon Bypass",
+        wardId,
+        wardName: `Ward ${wardId}: Siphon & Bypass Line`,
+        lat: wardId === "W7" ? 19.8720 : (wardId === "W1" ? 19.8970 : 19.8825),
+        lng: wardId === "W7" ? 74.4920 : (wardId === "W1" ? 74.4720 : 74.4720),
+        daysSinceLastTurn: 0,
+        appliedDischargeCusecs: 15,
         severity: Math.round(step.risk * 0.9),
         affectedPopulation: 3500,
         estimatedCost: 18000,

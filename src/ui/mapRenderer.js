@@ -196,6 +196,19 @@ export class MapRenderer {
       const score = triageItem ? triageItem.triageScore : (issue.triageScore || issue.severity);
       const iconEmoji = categoryIcons[issue.category] || '💧';
 
+      let lat = issue.lat;
+      let lng = issue.lng;
+      if (!lat || !lng) {
+        const wardObj = WARDS.find(w => w.id === issue.wardId) || WARDS[0];
+        if (wardObj && wardObj.coordinates && wardObj.coordinates.length > 0) {
+          lat = wardObj.coordinates[0][0];
+          lng = wardObj.coordinates[0][1];
+        } else {
+          lat = KOPARGAON_BOUNDS.center[0];
+          lng = KOPARGAON_BOUNDS.center[1];
+        }
+      }
+
       const html = `
         <div class="issue-map-pin ${isBatch1 ? 'pin-batch1' : (isBatch2 ? 'pin-batch2' : 'pin-pending')}">
           <div class="pin-inner">
@@ -213,10 +226,10 @@ export class MapRenderer {
         iconAnchor: [21, 19]
       });
 
-      const marker = L.marker([issue.lat, issue.lng], { icon: customIcon }).addTo(this.map);
+      const marker = L.marker([lat, lng], { icon: customIcon }).addTo(this.map);
 
       const title = this.currentLanguage === "mr" ? (issue.titleMr || issue.title) : issue.title;
-      const applicant = this.currentLanguage === "mr" ? (issue.applicantNameMr || issue.applicantName) : issue.applicantName;
+      const applicant = this.currentLanguage === "mr" ? (issue.applicantNameMr || issue.applicantName) : (issue.applicantName || "KMC Irrigation Cell");
       
       const statusBadge = isBatch1 
         ? '<span class="badge badge-success">Batch 1 (Gate Release Approved)</span>' 
