@@ -46,18 +46,37 @@ export class AppController {
   }
 
   init() {
+    this.initSplashGate();
     this.initVideoScrubber();
     this.initRenderers();
     this.bindEvents();
+    this.initCarouselInteractive();
+    this.initLandPipesToggle();
     this.runTriageCycle();
     this.updateLanguageUI();
+  }
+
+  initSplashGate() {
+    const splashGate = document.getElementById('splash-gate');
+    const btnEnter = document.getElementById('btn-enter-twin');
+    
+    if (splashGate && btnEnter) {
+      btnEnter.addEventListener('click', () => {
+        splashGate.classList.add('splash-hidden');
+        sessionStorage.setItem('KOPARGAON_SPLASH_DISMISSED', 'true');
+      });
+
+      // If already dismissed in this session, keep hidden
+      if (sessionStorage.getItem('KOPARGAON_SPLASH_DISMISSED') === 'true') {
+        splashGate.classList.add('splash-hidden');
+      }
+    }
   }
 
   initVideoScrubber() {
     this.videoElement = document.getElementById('hero-bg-video');
     if (!this.videoElement) return;
 
-    // Ensure video is muted and playsinline for iOS/Chrome
     this.videoElement.muted = true;
     this.videoElement.playsInline = true;
 
@@ -74,14 +93,12 @@ export class AppController {
 
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-    // If mobile / touch device with slow scrubbing, autoplay loop smoothly
     if (isTouchDevice && window.innerWidth < 768) {
       this.videoElement.loop = true;
       this.videoElement.play().catch(() => {});
       return;
     }
 
-    // Smooth scroll scrubbing loop with RAF
     const onScroll = () => {
       if (!isVideoReady || !this.videoElement.duration) return;
 
@@ -97,7 +114,6 @@ export class AppController {
 
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // RAF smoothing loop
     const smoothVideoUpdate = () => {
       if (isVideoReady && this.videoElement && !this.videoElement.seeking) {
         const diff = targetTime - this.videoElement.currentTime;
@@ -130,6 +146,64 @@ export class AppController {
     this.renderVoiceSamples();
   }
 
+  initCarouselInteractive() {
+    const cards = document.querySelectorAll('.carousel-card');
+    const previewNum = document.querySelector('.preview-badge-num');
+    const previewTitle = document.getElementById('preview-module-title');
+    const previewDesc = document.getElementById('preview-module-desc');
+    const previewIcon = document.querySelector('.preview-icon-graphic');
+    const statusLbl = document.getElementById('active-carousel-module-lbl');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+
+        const idx = card.dataset.modIdx;
+        const title = card.dataset.modTitle;
+        const desc = card.dataset.modDesc;
+        const icon = card.dataset.modIcon;
+
+        if (previewNum) previewNum.innerText = idx;
+        if (previewTitle) previewTitle.innerText = title;
+        if (previewDesc) previewDesc.innerText = desc;
+        if (previewIcon) previewIcon.innerText = icon;
+        if (statusLbl) statusLbl.innerText = `MODULE ACTIVE · ${idx} ${title.toUpperCase()}`;
+      });
+    });
+  }
+
+  initLandPipesToggle() {
+    const btnRaw = document.getElementById('btn-toggle-raw-land');
+    const btnPipes = document.getElementById('btn-toggle-pipes');
+    const box = document.getElementById('land-pipes-display-box');
+    const statusTxt = document.getElementById('land-pipes-status-txt');
+
+    if (btnRaw && btnPipes && box) {
+      btnRaw.addEventListener('click', () => {
+        btnRaw.classList.add('active');
+        btnPipes.classList.remove('active');
+        box.className = "display-box state-raw-land";
+        if (statusTxt) statusTxt.innerText = "RAW LAND PARCEL BOUNDARY · MAHABHULEKH SURVEY TRACE";
+      });
+
+      btnPipes.addEventListener('click', () => {
+        btnPipes.classList.add('active');
+        btnRaw.classList.remove('active');
+        box.className = "display-box state-pipes";
+        if (statusTxt) statusTxt.innerText = "GHOSTED PIPE NETWORK · ACTIVE FLOW SIMULATION";
+      });
+    }
+
+    const btnNextBatch = document.getElementById('btn-scroll-next-batch');
+    if (btnNextBatch) {
+      btnNextBatch.addEventListener('click', () => {
+        const b2 = document.getElementById('split-card-b2');
+        if (b2) b2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  }
+
   bindEvents() {
     // Language Toggle
     const langBtn = document.getElementById('lang-toggle-btn');
@@ -154,16 +228,6 @@ export class AppController {
         );
         this.runTriageCycle();
         this.renderAuditLedger();
-      });
-    }
-
-    // Run Triage Button
-    const runTriageBtn = document.getElementById('btn-run-triage');
-    if (runTriageBtn) {
-      runTriageBtn.addEventListener('click', () => {
-        this.runTriageCycle();
-        const triageSection = document.getElementById('section-triage-stepper');
-        if (triageSection) triageSection.scrollIntoView({ behavior: 'smooth' });
       });
     }
 
@@ -232,33 +296,28 @@ export class AppController {
   }
 
   applyPhaseFilter(phase) {
-    const colB1 = document.getElementById('col-batch1-wrapper');
-    const colB2 = document.getElementById('col-batch2-wrapper');
-    const colDef = document.getElementById('col-deferred-wrapper');
-    const grid = document.getElementById('stepper-grid-container');
+    const cardB1 = document.getElementById('split-card-b1');
+    const cardB2 = document.getElementById('split-card-b2');
+    const cardDef = document.getElementById('split-card-def');
 
-    if (!colB1 || !colB2 || !colDef || !grid) return;
+    if (!cardB1 || !cardB2 || !cardDef) return;
 
     if (phase === "all") {
-      colB1.style.display = "flex";
-      colB2.style.display = "flex";
-      colDef.style.display = "flex";
-      grid.style.gridTemplateColumns = "repeat(3, 1fr)";
+      cardB1.style.display = "block";
+      cardB2.style.display = "block";
+      cardDef.style.display = "block";
     } else if (phase === "batch1") {
-      colB1.style.display = "flex";
-      colB2.style.display = "none";
-      colDef.style.display = "none";
-      grid.style.gridTemplateColumns = "1fr";
+      cardB1.style.display = "block";
+      cardB2.style.display = "none";
+      cardDef.style.display = "none";
     } else if (phase === "batch2") {
-      colB1.style.display = "none";
-      colB2.style.display = "flex";
-      colDef.style.display = "none";
-      grid.style.gridTemplateColumns = "1fr";
+      cardB1.style.display = "none";
+      cardB2.style.display = "block";
+      cardDef.style.display = "none";
     } else if (phase === "deferred") {
-      colB1.style.display = "none";
-      colB2.style.display = "none";
-      colDef.style.display = "flex";
-      grid.style.gridTemplateColumns = "1fr";
+      cardB1.style.display = "none";
+      cardB2.style.display = "none";
+      cardDef.style.display = "block";
     }
   }
 
@@ -290,8 +349,7 @@ export class AppController {
     this.updateMetricsTicker(result.resourceUtilization);
     this.renderMapPins();
     this.renderXAIPanel();
-    this.renderCitizenPortal(result);
-    this.renderGovernancePanel();
+    this.renderAuditLedger();
   }
 
   renderMapPins() {
@@ -304,18 +362,16 @@ export class AppController {
   }
 
   renderTriageColumns(result) {
-    const b1Container = document.getElementById('queue-batch1');
-    const b2Container = document.getElementById('queue-batch2');
-    const defContainer = document.getElementById('queue-deferred');
+    const b1Container = document.getElementById('split-b1-items-list');
+    const b2Container = document.getElementById('split-b2-items-list');
+    const defContainer = document.getElementById('split-def-items-list');
 
-    if (!b1Container || !b2Container || !defContainer) return;
-
-    b1Container.innerHTML = result.batch1.map(item => this.createGrievanceCardHTML(item, "batch1")).join("");
-    b2Container.innerHTML = result.batch2.map(item => this.createGrievanceCardHTML(item, "batch2")).join("");
-    defContainer.innerHTML = result.deferred.map(item => this.createGrievanceCardHTML(item, "deferred")).join("");
+    if (b1Container) b1Container.innerHTML = result.batch1.map(item => this.createSplitCardHTML(item, "batch1")).join("");
+    if (b2Container) b2Container.innerHTML = result.batch2.map(item => this.createSplitCardHTML(item, "batch2")).join("");
+    if (defContainer) defContainer.innerHTML = result.deferred.map(item => this.createSplitCardHTML(item, "deferred")).join("");
 
     // Bind card click & Inspect XAI
-    document.querySelectorAll('.card-grievance').forEach(card => {
+    document.querySelectorAll('.split-item-row').forEach(card => {
       card.addEventListener('click', (e) => {
         const id = card.dataset.id;
         this.selectIssueForInspection(id);
@@ -328,42 +384,30 @@ export class AppController {
     });
   }
 
-  createGrievanceCardHTML(item, type) {
+  createSplitCardHTML(item, type) {
     const isSelected = item.id === this.selectedIssueId;
     const title = this.currentLanguage === "mr" ? (item.titleMr || item.title) : item.title;
     const applicant = this.currentLanguage === "mr" ? (item.applicantNameMr || item.applicantName) : item.applicantName;
     const scoreClass = item.triageScore >= 80 ? "high" : (item.triageScore >= 60 ? "medium" : "low");
 
-    let bottleneckHTML = "";
-    if (item.bottlenecks && item.bottlenecks.length > 0) {
-      bottleneckHTML = `<div class="card-bottlenecks">⚠️ ${item.bottlenecks[0]}</div>`;
-    }
-
     const assignedBadge = item.assignedCrew 
-      ? `<span style="color: #10b981; font-weight:700; font-size:11px;">🚪 ${item.assignedCrew} • 🌊 ${item.appliedDischargeCusecs || 0} cfs</span>` 
-      : `<span style="color: #94a3b8; font-size:11px;">Est. Wait: +${Math.round(item.estimatedWaitHours || 12)}h</span>`;
+      ? `<span style="color: #23531F; font-weight:700; font-size:11px;">🚪 ${item.assignedCrew} • 🌊 ${item.appliedDischargeCusecs || 0} cfs</span>` 
+      : `<span style="color: #8E8695; font-size:11px;">Est. Wait: +${Math.round(item.estimatedWaitHours || 12)}h</span>`;
 
     return `
-      <div class="card-grievance ${isSelected ? 'selected' : ''}" data-id="${item.id}">
-        <div class="card-top">
+      <div class="split-item-row ${isSelected ? 'selected' : ''}" data-id="${item.id}" style="background:#F7F4EC; border-radius:8px; padding:12px 14px; margin-bottom:8px; cursor:pointer; border-left:3px solid ${isSelected ? '#7ED957' : '#D5CEBF'};">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
           <div>
-            <span style="font-size:10.5px; color:#0284c7; font-weight:700; display:block; font-family:var(--font-mono);">📜 ${item.permitNo || 'PERMIT QUEUED'}</span>
-            <h4 class="card-title">${title}</h4>
+            <span style="font-size:10px; color:#23531F; font-weight:700; font-family:var(--font-mono); display:block;">📜 ${item.permitNo || 'PERMIT QUEUED'}</span>
+            <strong style="font-size:13px; color:#1A1420; display:block;">${title}</strong>
           </div>
-          <span class="score-pill ${scoreClass}">${item.triageScore}</span>
+          <span style="background:#FFFFFF; font-family:var(--font-mono); font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; color:#1A1420; box-shadow:0 2px 6px rgba(0,0,0,0.06);">${item.triageScore}</span>
         </div>
-        <div style="font-size:11.5px; color:#334155; margin-bottom:4px;"><strong>Applicant:</strong> ${applicant}</div>
-        <div class="card-ward">📍 ${item.wardName}</div>
-        <div class="card-metrics">
-          <div>🌾 <strong>${item.cropType ? item.cropType.split(' ')[0] : 'Water Claim'}</strong></div>
-          <div>⏱️ <strong>${item.daysSinceLastTurn || 0}d dry</strong></div>
-          <div>🌊 <strong>${item.appliedDischargeCusecs || 0} cfs</strong></div>
-        </div>
-        <div style="margin-top: 8px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:11px; color:#4A4250; margin-bottom:4px;"><strong>Applicant:</strong> ${applicant} • 📍 ${item.wardName}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
           ${assignedBadge}
-          <span class="inspect-xai-link" style="font-size:11px; color:#0284c7; font-weight:700; text-decoration:underline; cursor:pointer;">Inspect XAI →</span>
+          <span class="inspect-xai-link" style="font-size:11px; color:#23531F; font-weight:700; text-decoration:underline;">Inspect XAI →</span>
         </div>
-        ${bottleneckHTML}
       </div>
     `;
   }
@@ -384,410 +428,151 @@ export class AppController {
 
     // 1. Single Item Justification
     const justif = this.xaiEngine.generateJustification(itemA, this.currentLanguage);
-    const justifBox = document.getElementById('xai-justification-box');
-    if (justifBox) {
-      const title = this.currentLanguage === "mr" ? (itemA.titleMr || itemA.title) : itemA.title;
-      const applicant = this.currentLanguage === "mr" ? (itemA.applicantNameMr || itemA.applicantName) : itemA.applicantName;
+    const titleEl = document.getElementById('xai-selected-title');
+    const scoreEl = document.getElementById('xai-selected-score');
+    const plainTextBox = document.getElementById('xai-explanation-text');
+    const shapBarsBox = document.getElementById('xai-shap-bars');
 
-      justifBox.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <div>
-            <span style="font-size:11px; color:#0284c7; font-weight:700; font-family:var(--font-mono);">📜 ${itemA.permitNo || 'PERMIT PENDING'} • ${applicant}</span>
-            <h3 style="font-size:16px; font-weight:800; color:#0f172a;">${title}</h3>
+    if (titleEl) titleEl.innerText = `Permit Breakdown: ${itemA.id} (${itemA.wardName})`;
+    if (scoreEl) scoreEl.innerText = `Score: ${itemA.triageScore}/100`;
+
+    if (plainTextBox) {
+      plainTextBox.innerHTML = `
+        <div style="background:#F7F4EC; padding:16px; border-radius:8px; margin-top:12px;">
+          <h4 style="font-size:14px; font-weight:800; color:#1A1420; margin-bottom:6px;">${justif.publicBadge}</h4>
+          <p style="font-size:13px; color:#4A4250; line-height:1.5;">${justif.summary}</p>
+          <div style="margin-top:10px;">
+            <strong style="font-size:11px; color:#23531F; text-transform:uppercase;">Key Agronomic Drivers:</strong>
+            <ul style="padding-left:16px; font-size:12px; color:#4A4250; margin-top:4px;">
+              ${justif.keyDrivers.map(d => `<li>${d}</li>`).join("")}
+            </ul>
           </div>
-          <span class="badge-pill-green">
-            ${justif.publicBadge}
-          </span>
-        </div>
-        <p style="font-size:13px; color:#334155; margin-bottom:12px; line-height:1.45;">${justif.summary}</p>
-        <div style="background:#ffffff; border:1px solid var(--border-light); padding:12px; border-radius:8px;">
-          <strong style="font-size:11.5px; color:#0284c7; display:block; margin-bottom:6px;">Shejpali Decision Drivers:</strong>
-          <ul style="padding-left:16px; font-size:12px; color:#475569; display:flex; flex-direction:column; gap:4px;">
-            ${justif.keyDrivers.map(d => `<li>${d}</li>`).join("")}
-          </ul>
         </div>
       `;
     }
 
-    // 2. SHAP Chart
-    if (itemA.evaluation && itemA.evaluation.contributions) {
-      this.chartsRenderer.renderSHAPChart('shap-canvas', itemA.evaluation.contributions, this.currentLanguage);
+    // Render SHAP Bars
+    if (shapBarsBox && itemA.evaluation && itemA.evaluation.contributions) {
+      const contribs = itemA.evaluation.contributions;
+      shapBarsBox.innerHTML = Object.entries(contribs).map(([k, v]) => {
+        const isPos = v >= 0;
+        const widthPct = Math.min(100, Math.abs(v) * 2.5);
+        return `
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:#1A1420; margin-bottom:2px;">
+              <span>${k}</span>
+              <span style="color:${isPos ? '#23531F' : '#DC2626'}">${isPos ? '+' : ''}${v.toFixed(1)} pts</span>
+            </div>
+            <div style="background:#ECE7DD; height:6px; border-radius:3px; overflow:hidden;">
+              <div style="background:${isPos ? '#7ED957' : '#EF4444'}; width:${widthPct}%; height:100%;"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    // 3. Contrastive Comparison (A vs B)
-    const contrastBox = document.getElementById('xai-contrastive-box');
-    if (contrastBox && itemB) {
+    // Populate Selects for Contrastive A vs B
+    const selectA = document.getElementById('contrast-issue-a-select');
+    const selectB = document.getElementById('contrast-issue-b-select');
+    const contrastResBox = document.getElementById('xai-contrast-result');
+
+    if (selectA && selectB) {
+      selectA.innerHTML = this.currentTriageResult.allScored.map(i => `<option value="${i.id}" ${i.id === this.contrastIssueAId ? 'selected' : ''}>${i.id}: ${i.wardName} (${i.triageScore})</option>`).join("");
+      selectB.innerHTML = this.currentTriageResult.allScored.map(i => `<option value="${i.id}" ${i.id === this.contrastIssueBId ? 'selected' : ''}>${i.id}: ${i.wardName} (${i.triageScore})</option>`).join("");
+
+      selectA.onchange = (e) => { this.contrastIssueAId = e.target.value; this.renderXAIPanel(); };
+      selectB.onchange = (e) => { this.contrastIssueBId = e.target.value; this.renderXAIPanel(); };
+    }
+
+    if (contrastResBox && itemB) {
       const contrast = this.xaiEngine.generateContrastiveExplanation(itemA, itemB, this.currentLanguage);
-      contrastBox.innerHTML = `
-        <div style="margin-bottom:10px;">
-          <h4 style="font-size:13.5px; font-weight:800; color:#0f172a;">${contrast.headline}</h4>
-          <span style="font-size:11px; color:#64748b;">Comparing ${itemA.id} (${itemA.wardName}) vs ${itemB.id} (${itemB.wardName})</span>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          ${contrast.comparisons.map(c => `
-            <div class="contrast-row">
-              <span style="font-weight:700; color:#0f172a;">${c.dimension}:</span>
-              <span style="color:#475569;">${c.text}</span>
-            </div>
-          `).join("")}
-        </div>
-        <div style="margin-top:10px; padding:8px 12px; background:#f0fdf4; border-left:3px solid #16a34a; border-radius:4px; font-size:11.5px; color:#15803d;">
-          <strong>Verdict:</strong> ${contrast.verdict}
-        </div>
-      `;
-    }
-
-    // 4. Opportunity Cost Panel
-    const oppBox = document.getElementById('xai-opportunity-box');
-    if (oppBox) {
-      const oppData = this.xaiEngine.computeOpportunityCosts(
-        this.currentTriageResult.batch1,
-        [...this.currentTriageResult.batch2, ...this.currentTriageResult.deferred],
-        this.currentLanguage
-      );
-      oppBox.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:12px; font-weight:600; color:#0f172a;">
-          <span>Canal Cusecs Committed: <strong>${oppData.totalCusecsAllocated} Cfs</strong></span>
-          <span>OpEx Allocation: <strong>₹${oppData.totalBudgetSpent.toLocaleString()}</strong></span>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          ${oppData.delayedCivicItems.map(d => `
-            <div style="background:#ffffff; border:1px solid var(--border-light); padding:8px 10px; border-radius:6px; font-size:11.5px;">
-              <div style="font-weight:700; color:#0f172a;">${d.title} (${d.ward})</div>
-              <div style="color:#d97706; font-size:11px; margin-top:2px;">⏳ ${d.consequence}</div>
-              <div style="color:#64748b; font-size:10px;">Constraint: ${d.bottleneck}</div>
-            </div>
-          `).join("")}
-        </div>
-      `;
-    }
-
-    // 5. Counterfactual Playground
-    const cfBox = document.getElementById('xai-counterfactual-box');
-    if (cfBox && this.currentTriageResult.batch2.length > 0) {
-      const deferredTarget = this.currentTriageResult.batch2[0];
-      const lowestBatch1 = this.currentTriageResult.batch1[this.currentTriageResult.batch1.length - 1];
-      const cutoff = lowestBatch1 ? lowestBatch1.triageScore : 75;
-      const cfResult = this.xaiEngine.solveCounterfactual(deferredTarget, cutoff);
-
-      cfBox.innerHTML = `
-        <div style="margin-bottom:8px;">
-          <h4 style="font-size:13px; font-weight:700; color:#0f172a;">Target: ${deferredTarget.id} (${deferredTarget.cropType ? deferredTarget.cropType.split(' ')[0] : 'Crop'}) (Score: ${cfResult.currentScore}) $\\to$ Cutoff (${cfResult.targetCutoff})</h4>
-          <span style="font-size:11px; color:#7c3aed; font-weight:600;">Required Delta to enter Batch 1 Sluice Release: <strong>+${cfResult.requiredDelta} pts</strong></span>
-        </div>
-        <div class="counterfactual-slider-box">
-          <div class="cf-slider-row">
-            <span>Simulate Soil Moisture Stress / Days Dry:</span>
-            <strong id="cf-pop-val" style="color:#7c3aed;">+0 days</strong>
+      contrastResBox.innerHTML = `
+        <div style="background:#F7F4EC; padding:14px; border-radius:8px; margin-top:10px;">
+          <h4 style="font-size:13.5px; font-weight:800; color:#1A1420; margin-bottom:6px;">${contrast.headline}</h4>
+          <div style="display:flex; flex-direction:column; gap:4px; font-size:12px; color:#4A4250;">
+            ${contrast.comparisons.map(c => `<div><strong>${c.dimension}:</strong> ${c.text}</div>`).join("")}
           </div>
-          <input type="range" class="cf-slider" id="cf-pop-slider" min="0" max="20" step="1" value="0" />
-          <div id="cf-outcome-text" style="margin-top:8px; font-size:11.5px; color:#475569;">
-            Drag slider to simulate soil wilting stress and see if rotational equity promotes this farm to Batch 1.
-          </div>
+          <div style="margin-top:8px; font-size:11.5px; color:#23531F; font-weight:700;">Verdict: ${contrast.verdict}</div>
         </div>
       `;
-
-      const slider = document.getElementById('cf-pop-slider');
-      if (slider) {
-        slider.addEventListener('input', (e) => {
-          const addDays = parseInt(e.target.value, 10);
-          const cfVal = document.getElementById('cf-pop-val');
-          if (cfVal) cfVal.innerText = `+${addDays} days dry`;
-          const boostedScore = Math.min(99.5, Math.round((cfResult.currentScore + (addDays / 20) * 22) * 10) / 10);
-          const qualifies = boostedScore >= cfResult.targetCutoff;
-          const outText = document.getElementById('cf-outcome-text');
-          if (outText) {
-            outText.innerHTML = qualifies
-              ? `<span style="color:#15803d; font-weight:700;">🎉 Promoted to Batch 1! New Shejpali Score: ${boostedScore} exceeds cutoff ${cfResult.targetCutoff}</span>`
-              : `<span style="color:#d97706;">Score increases to ${boostedScore}. Still needs +${Math.round((cfResult.targetCutoff - boostedScore) * 10) / 10} pts.</span>`;
-          }
-        });
-      }
     }
-  }
-
-  triggerCascadeSimulation() {
-    this.isCascading = true;
-    const cascadeResult = this.cascadeEngine.triggerFailure("DIST_D2");
-    this.cascadeRenderer.setData(this.cascadeEngine.graph, true);
-
-    // If preemptive tasks were generated, merge into active grievances
-    if (cascadeResult.preemptiveTasks.length > 0) {
-      cascadeResult.preemptiveTasks.forEach(task => {
-        if (!this.activeGrievances.some(g => g.id === task.id)) {
-          this.activeGrievances.unshift(task);
-        }
-      });
-    }
-
-    // Record in Audit Ledger
-    this.auditLedger.addBlock(
-      "CANAL_CASCADE_BREACH",
-      "Godavari Canal Sub-Division Telemetry",
-      { root: "DIST_D2", affectedNodes: cascadeResult.steps.length, resilienceScore: cascadeResult.networkResilienceScore },
-      "Simulated D-2 Siphon Silt Breach & Conveyance Loss. Triggered dynamic failure propagation to Tail-End Minor 4 & Hospital Line."
-    );
-
-    // Re-run triage with cascade updates
-    this.runTriageCycle();
-
-    // Show alert banner
-    const banner = document.getElementById('cascade-alert-banner');
-    if (banner) {
-      banner.style.display = 'flex';
-      banner.innerHTML = `
-        <span>🚨 <strong>Active Hydraulic Canal Cascade Alert:</strong> Distributary D-2 breach is starving Tail-End Minor 4 Pomegranate Orchards & Hospital Master ESR-2. Digital Twin generated <strong>${cascadeResult.preemptiveTasks.length} preemptive bypass actions</strong>.</span>
-      `;
-    }
-  }
-
-  resetCascadeSimulation() {
-    this.isCascading = false;
-    this.cascadeEngine.reset();
-    this.cascadeRenderer.setData(this.cascadeEngine.graph, false);
-    this.activeGrievances = this.activeGrievances.filter(g => !g.isPreemptive);
-    this.runTriageCycle();
-
-    const banner = document.getElementById('cascade-alert-banner');
-    if (banner) banner.style.display = 'none';
-  }
-
-  handleCascadeNodeSelected(node) {
-    const detailBox = document.getElementById('cascade-node-details');
-    if (!detailBox) return;
-
-    const label = this.currentLanguage === "mr" ? (node.labelMr || node.label) : node.label;
-    const outgoing = this.cascadeEngine.graph.edges.filter(e => e.from === node.id);
-
-    detailBox.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <h4 style="font-size:15px; font-weight:800; color:#fff;">${label}</h4>
-        <span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid #ef4444; padding:2px 8px; border-radius:10px; font-size:11px; font-family:var(--font-mono);">
-          Water Stress: ${node.riskScore}%
-        </span>
-      </div>
-      <div style="font-size:12px; color:#cbd5e1; margin-bottom:6px;">Ward: <strong>${node.ward}</strong> | Type: <strong>${node.type.toUpperCase()}</strong></div>
-      <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:6px; font-size:11px;">
-        <strong style="color:#38bdf8; display:block; margin-bottom:4px;">Downstream Vulnerable Targets:</strong>
-        <ul style="padding-left:14px;">
-          ${outgoing.length > 0 ? outgoing.map(e => `<li>${e.to} (Failure Prob: ${Math.round(e.probability * 100)}% in ~${e.timeDelayHours}h)</li>`).join("") : '<li>Terminal distribution reach</li>'}
-        </ul>
-      </div>
-    `;
   }
 
   renderVoiceSamples() {
-    const container = document.getElementById('voice-samples-container');
-    if (!container) return;
-
-    const samples = this.voiceAI.getSamples();
-    container.innerHTML = samples.map(s => {
-      const label = this.currentLanguage === "mr" ? s.labelMr : s.label;
-      return `
-        <button class="voice-sample-btn" data-id="${s.id}">
-          <div style="font-weight:700; color:#0284c7; margin-bottom:4px; font-size:12.5px;">🎙️ ${label}</div>
-          <p style="font-size:11.5px; color:#475569; font-style:italic; line-height:1.4;">"${s.audioText}"</p>
-        </button>
-      `;
-    }).join("");
-
-    container.querySelectorAll('.voice-sample-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const sample = samples.find(s => s.id === id);
-        if (sample) {
-          this.processVoiceInput(sample.audioText);
-        }
+    document.querySelectorAll('.voice-sample-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const idx = parseInt(chip.dataset.sampleIdx, 10);
+        this.simulateVoiceSample(idx);
       });
     });
   }
 
+  simulateVoiceSample(idx) {
+    const samples = [
+      { ward: "Ward 5 (Laxmi Nagar)", crop: "Pomegranate (Wilting)", urgency: "94/100 (Critical)", action: "Allocate 28 Cfs via Minor-4" },
+      { ward: "Ward 7 (Tilak Nagar)", crop: "Hospital ESR-2 Lifeline", urgency: "99/100 (Emergency)", action: "Release 22 Cfs Intake Booster" },
+      { ward: "Ward 1 (Bet Kopargaon)", crop: "Onion Seedlings (Sandy Soil)", urgency: "82/100 (High)", action: "Schedule 18 Cfs Lift Awartan" }
+    ];
+    const s = samples[idx] || samples[0];
+
+    const vWard = document.getElementById('v-ward');
+    const vCrop = document.getElementById('v-crop');
+    const vUrgency = document.getElementById('v-urgency');
+    const vAction = document.getElementById('v-action');
+    const statusText = document.getElementById('voice-recording-status');
+
+    if (vWard) vWard.innerText = s.ward;
+    if (vCrop) vCrop.innerText = s.crop;
+    if (vUrgency) vUrgency.innerText = s.urgency;
+    if (vAction) vAction.innerText = s.action;
+    if (statusText) statusText.innerText = `Simulated spoken intake for ${s.ward} successfully extracted.`;
+  }
+
   toggleVoiceRecord() {
-    const micBtn = document.getElementById('btn-voice-record');
-    if (this.voiceAI.isListening) {
-      this.voiceAI.isListening = false;
-      if (micBtn) micBtn.classList.remove('listening');
-    } else {
-      this.voiceAI.isListening = true;
-      if (micBtn) micBtn.classList.add('listening');
-
+    const statusText = document.getElementById('voice-recording-status');
+    if (statusText) {
+      statusText.innerText = "🎙️ Listening to Marathi spoken dialect... (Simulating 3s)";
       setTimeout(() => {
-        this.voiceAI.isListening = false;
-        if (micBtn) micBtn.classList.remove('listening');
-        const defaultSample = this.voiceAI.getSamples()[0];
-        this.processVoiceInput(defaultSample.audioText);
-      }, 2500);
+        this.simulateVoiceSample(0);
+      }, 1500);
     }
-  }
-
-  processVoiceInput(marathiText) {
-    const parsedGrievance = this.voiceAI.extractCivicIntent(marathiText);
-    
-    // Play voice synthesizer feedback
-    this.voiceAI.speakMarathi(`तुमचा शेजपाळी पाणी अर्ज प्राप्त झाला आहे. प्रभाग ${parsedGrievance.wardId} मधील ${parsedGrievance.cropType} मागणी नोंदवून डिजिटल ट्विनमध्ये समाविष्ट केली आहे.`);
-
-    // Display in UI
-    const outBox = document.getElementById('voice-output-card');
-    if (outBox) {
-      outBox.style.display = 'block';
-      outBox.innerHTML = `
-        <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:14px; margin-bottom:16px;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px; align-items:center;">
-            <strong style="color:#0284c7; font-size:13px;">✅ Shejpali Permit Application Extracted</strong>
-            <span style="font-size:11px; background:#dcfce7; color:#15803d; font-weight:700; padding:2px 8px; border-radius:4px;">NLP Confidence: 96%</span>
-          </div>
-          <p style="font-size:12px; color:#334155; font-style:italic; margin-bottom:10px;">"${marathiText}"</p>
-          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; font-size:11.5px; background:#ffffff; padding:10px; border-radius:6px; border:1px solid var(--border-light);">
-            <div>Ward: <strong>${parsedGrievance.wardName}</strong></div>
-            <div>Crop: <strong>${parsedGrievance.cropType}</strong></div>
-            <div>Criticality: <strong>${parsedGrievance.cropCriticalityIndex}/100</strong></div>
-          </div>
-        </div>
-      `;
-    }
-
-    // Add to active grievances and optimize
-    this.activeGrievances.unshift(parsedGrievance);
-    this.runTriageCycle();
-  }
-
-  renderCitizenPortal(result) {
-    const publicList = document.getElementById('citizen-public-queue');
-    if (!publicList) return;
-
-    publicList.innerHTML = result.allScored.slice(0, 6).map((item, idx) => {
-      const isBatch1 = item.allocatedBatch === "BATCH_1";
-      const title = this.currentLanguage === "mr" ? (item.titleMr || item.title) : item.title;
-      const applicant = this.currentLanguage === "mr" ? (item.applicantNameMr || item.applicantName) : item.applicantName;
-      const statusText = isBatch1 
-        ? (this.currentLanguage === "mr" ? "कालवा गेट उघडण्यास मंजूर (पाणी सोडले)" : "Authorized for Release (Gates Open)")
-        : (this.currentLanguage === "mr" ? `पुढील शिफ्टमध्ये नियोजित (प्रतीक्षा: ${Math.round(item.estimatedWaitHours || 12)} तास)` : `Scheduled Next Shift (Est. wait ~${Math.round(item.estimatedWaitHours || 12)} hrs)`);
-
-      const reason = this.currentLanguage === "mr"
-        ? `शेजपाळी गुण: ${item.triageScore}/100 • ${item.cropType ? item.cropType.split(' ')[0] : ''}`
-        : `Shejpali Score: ${item.triageScore}/100 • ${item.cropType ? item.cropType.split(' ')[0] : ''}`;
-
-      return `
-        <div style="background:#ffffff; border:1px solid ${isBatch1 ? '#86efac' : 'var(--border-light)'}; border-radius:8px; padding:12px; box-shadow:var(--shadow-sm);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-            <strong style="font-size:13px; color:#0f172a;">#${idx + 1} ${applicant} - ${title}</strong>
-            <span style="font-size:11px; font-weight:700; color:${isBatch1 ? '#15803d' : '#d97706'};">
-              ${statusText}
-            </span>
-          </div>
-          <div style="font-size:11.5px; color:#64748b; display:flex; justify-content:space-between;">
-            <span>📍 ${item.wardName} (${item.appliedDischargeCusecs || 0} cfs)</span>
-            <span>${reason}</span>
-          </div>
-        </div>
-      `;
-    }).join("");
-  }
-
-  renderGovernancePanel() {
-    this.renderAuditLedger();
-    const neglectScores = this.temporalLedger.getScores();
-    const trustIndices = this.temporalLedger.getTrustIndices();
-    this.chartsRenderer.renderEquityRadar('radar-canvas', neglectScores, trustIndices, this.currentLanguage);
   }
 
   renderAuditLedger() {
-    const list = document.getElementById('audit-blocks-list');
-    if (!list) return;
+    const container = document.getElementById('audit-blocks-list');
+    if (!container) return;
 
-    const chain = this.auditLedger.getChain() || [];
-    list.innerHTML = chain.slice().reverse().map(block => {
-      const prevHash = block.previousHash || '00000000000000000000000000000000';
-      const currHash = block.hash || '00000000000000000000000000000000';
-      const timeStr = block.timestamp ? new Date(block.timestamp).toLocaleTimeString() : 'N/A';
-      return `
-        <div class="audit-block-card">
-          <div class="audit-header">
-            <span><strong>Block #${block.index ?? 0}</strong> • ${block.actionType || 'AUDIT_LOG'}</span>
-            <span>${timeStr}</span>
-          </div>
-          <div style="font-size:11px; color:#cbd5e1; margin-bottom:4px;">Authority: <strong>${block.actor || 'SYSTEM'}</strong></div>
-          <div style="font-size:11px; color:#94a3b8; margin-bottom:6px;">"${block.justification || ''}"</div>
-          <div class="audit-hash">Hash: ${currHash}</div>
-          <div style="font-size:9.5px; color:#64748b;">Prev: ${prevHash.slice(0, 32)}...</div>
+    const chain = this.auditLedger.getChain();
+    container.innerHTML = chain.map((block, idx) => `
+      <div style="background:#140D18; padding:10px; border-radius:6px; margin-bottom:8px; border-left:3px solid #7ED957; font-size:11px;">
+        <div style="display:flex; justify-content:space-between; color:#F5B814; font-weight:700; margin-bottom:2px;">
+          <span>BLOCK #${block.index} [${block.actionType}]</span>
+          <span>${new Date(block.timestamp).toLocaleTimeString()}</span>
         </div>
-      `;
-    }).join("");
-  }
-
-  testTamperDetection() {
-    this.auditLedger.simulateTampering(1);
-    const integrity = this.auditLedger.verifyChainIntegrity();
-    
-    const banner = document.getElementById('cascade-alert-banner');
-    if (banner) {
-      banner.style.display = 'flex';
-      banner.style.background = integrity.valid ? 'linear-gradient(90deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95))' : 'linear-gradient(90deg, rgba(239,68,68,0.95), rgba(185,28,28,0.95))';
-      banner.innerHTML = integrity.valid
-        ? `<span>✅ <strong>Blockchain Verification Passed:</strong> All SHA-256 blocks valid.</span>`
-        : `<span>🚨 <strong>SECURITY ALERT: Cryptographic chain tampering detected at Block #${integrity.brokenIndex}!</strong> Reason: ${integrity.reason}</span>`;
-      setTimeout(() => { banner.style.display = 'none'; }, 6000);
-    }
-    this.renderAuditLedger();
+        <div style="color:#C5BFCC; margin-bottom:4px;">${block.justification}</div>
+        <div style="color:#38BDF8; font-size:10px;">Hash: ${block.hash.substring(0, 24)}...</div>
+      </div>
+    `).join("");
   }
 
   exportRTI() {
-    const report = this.auditLedger.generateRTIReport();
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(report, null, 2));
+    const rti = this.auditLedger.generateRTIReport();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(rti, null, 2));
     const dlAnchor = document.createElement('a');
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `Kopargaon_Shejpali_Audit_RTI_${Date.now()}.json`);
-    document.body.appendChild(dlAnchor);
+    dlAnchor.setAttribute("download", `KMC_SHEJPALI_RTI_REPORT_${Date.now()}.json`);
     dlAnchor.click();
-    dlAnchor.remove();
+    alert("✅ Proactive Section 4(1)(b) RTI Audit Certificate exported successfully!");
   }
 
-  openOverrideModal() {
-    const modal = document.getElementById('override-modal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-
-    const select = document.getElementById('override-issue-select');
-    if (select) {
-      select.innerHTML = this.activeGrievances.map(g => `<option value="${g.id}">${g.id}: ${g.applicantName} (${g.cropType ? g.cropType.split(' ')[0] : 'Crop'})</option>`).join("");
+  testTamperDetection() {
+    const success = this.auditLedger.simulateTampering(1);
+    const integrity = this.auditLedger.verifyChainIntegrity();
+    
+    if (!integrity.valid) {
+      alert(`🚨 TAMPER DETECTED BY CRYPTOGRAPHIC LEDGER!\nBroken Block Index: ${integrity.brokenIndex}\nReason: ${integrity.reason}\nBlockchain security preserved.`);
     }
-
-    const closeBtn = document.getElementById('btn-modal-close');
-    if (closeBtn) {
-      closeBtn.onclick = () => { modal.style.display = 'none'; };
-    }
-
-    const cancelBtn = document.getElementById('btn-modal-cancel');
-    if (cancelBtn) {
-      cancelBtn.onclick = () => { modal.style.display = 'none'; };
-    }
-
-    const confirmBtn = document.getElementById('btn-modal-confirm');
-    if (confirmBtn) {
-      confirmBtn.onclick = () => {
-        const issueId = select.value;
-        const reason = document.getElementById('override-reason-input').value || "Statutory executive prerogative under Section 32";
-        const officer = document.getElementById('override-officer-input').value || "Executive Engineer (Irrigation Div)";
-
-        // Boost score and record override in tamper-proof chain
-        const target = this.activeGrievances.find(g => g.id === issueId);
-        if (target) {
-          target.severity = 99;
-          target.cropCriticalityIndex = 99;
-          target.daysSinceLastTurn = 45;
-        }
-
-        this.auditLedger.addBlock(
-          "SHEJPALI_STAGE_GATE_OVERRIDE",
-          officer,
-          { targetPermitId: issueId, targetApplicant: target?.applicantName, targetWard: target?.wardName },
-          `Executive Override Applied: ${reason}`
-        );
-
-        modal.style.display = 'none';
-        this.runTriageCycle();
-      };
-    }
+    this.renderAuditLedger();
   }
 
   updateMetricsTicker(utilization) {
@@ -796,47 +581,20 @@ export class AppController {
     const equipVal = document.getElementById('ticker-equip-val');
     const trustVal = document.getElementById('ticker-trust-val');
 
-    const statAllocated = document.getElementById('stat-allocated-cfs');
-    const statRemaining = document.getElementById('stat-remaining-cfs');
-    const statOptBudget = document.getElementById('stat-opt-budget');
-
     const cfsAllocated = utilization.cusecsAllocated || 66;
-    const cfsTotal = utilization.cusecsTotal || 140;
-    const cfsPct = utilization.cusecsPctUsed || 47;
+    const cfsTotal = 140;
+    const cfsPct = Math.round((cfsAllocated / cfsTotal) * 100);
 
-    if (budgetVal) {
-      budgetVal.innerText = `${cfsAllocated} / ${cfsTotal} Cusecs (${cfsPct}%)`;
-    }
-    if (statAllocated) statAllocated.innerText = `${cfsAllocated}`;
-    if (statRemaining) statRemaining.innerText = `${cfsTotal - cfsAllocated}`;
-    if (statOptBudget) statOptBudget.innerText = `₹${(utilization.budgetAllocated || 96500).toLocaleString()}`;
-
-    if (crewVal) {
-      const activeCrews = Object.values(utilization.crewRemainingHours || {}).filter(h => h < 8).length;
-      crewVal.innerText = `${4 - activeCrews} / 4 Available`;
-    }
-    if (equipVal) {
-      const busyEquip = Object.values(utilization.equipmentAssigned || {}).filter(val => val !== null).length;
-      equipVal.innerText = `${5 - busyEquip} / 5 Ready`;
-    }
+    if (budgetVal) budgetVal.innerText = `${cfsAllocated} / ${cfsTotal} Cusecs (${cfsPct}%)`;
+    if (crewVal) crewVal.innerText = `4 / 4 Available`;
+    if (equipVal) equipVal.innerText = `5 / 5 Ready`;
     if (trustVal) {
       const avgTrust = Math.round(Object.values(this.temporalLedger.getTrustIndices()).reduce((a, b) => a + b, 0) / 7);
       trustVal.innerText = `${avgTrust}/100`;
     }
-
-    // Also update Donut chart
-    this.chartsRenderer.renderBudgetDonut('budget-canvas', utilization, this.currentLanguage);
   }
 
   updateLanguageUI() {
-    const dict = I18N[this.currentLanguage] || I18N.en;
-    
-    // Header & Titles
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.dataset.i18n;
-      if (dict[key]) el.innerText = dict[key];
-    });
-
     const langBtn = document.getElementById('lang-toggle-btn');
     if (langBtn) {
       const label = langBtn.querySelector('.lang-label');
@@ -844,22 +602,17 @@ export class AppController {
         label.innerText = this.currentLanguage === "en" ? "मराठी (MR)" : "English (EN)";
       }
     }
-
     if (this.mapRenderer) this.mapRenderer.setLanguage(this.currentLanguage);
-    if (this.cascadeRenderer) this.cascadeRenderer.setLanguage(this.currentLanguage);
     if (this.currentTriageResult) {
       this.renderTriageColumns(this.currentTriageResult);
       this.renderXAIPanel();
-      this.renderCitizenPortal(this.currentTriageResult);
     }
-    this.renderVoiceSamples();
   }
 
   // ==========================================
   // LIVE HACKATHON CHALLENGES CONTROLLERS
   // ==========================================
   bindChallengeEvents() {
-    // Challenge 1: Mid-Operation DB Corruption Simulation
     const btnSimWipe = document.getElementById('btn-simulate-db-wipe');
     if (btnSimWipe) {
       btnSimWipe.addEventListener('click', () => {
@@ -867,7 +620,6 @@ export class AppController {
       });
     }
 
-    // Challenge 1: Autonomous Self-Healing Trigger
     const btnSelfHeal = document.getElementById('btn-trigger-self-heal');
     if (btnSelfHeal) {
       btnSelfHeal.addEventListener('click', () => {
@@ -875,7 +627,6 @@ export class AppController {
       });
     }
 
-    // Challenge 2: WhatsApp Rumor Preset Selector
     const rumorSelect = document.getElementById('rumor-preset-select');
     const customRumorInput = document.getElementById('custom-rumor-input');
     if (rumorSelect && customRumorInput) {
@@ -889,7 +640,6 @@ export class AppController {
       });
     }
 
-    // Challenge 2: Verify WhatsApp Claim
     const btnVerifyRumor = document.getElementById('btn-verify-rumor');
     if (btnVerifyRumor) {
       btnVerifyRumor.addEventListener('click', () => {
@@ -897,7 +647,6 @@ export class AppController {
       });
     }
 
-    // Challenge 2: Sybil Attack Simulator
     const btnSybil = document.getElementById('btn-simulate-sybil-attack');
     if (btnSybil) {
       btnSybil.addEventListener('click', () => {
@@ -909,7 +658,6 @@ export class AppController {
   simulateCatastrophicCorruption() {
     const report = this.resilienceEngine.simulateCatastrophicCorruption(this.activeGrievances);
     
-    // Update UI Indicators
     const badge = document.getElementById('storage-health-badge');
     const badgeText = document.getElementById('storage-health-text');
     const metricRecords = document.getElementById('metric-primary-records');
@@ -937,7 +685,7 @@ export class AppController {
       logTerminal.innerHTML += `
         <div class="terminal-log-line text-red">🚨 [CRITICAL_STORAGE_WIPEOUT] Primary database wiped/corrupted mid-operation!</div>
         <div class="terminal-log-line text-amber">⚡ In-Flight Transaction Buffer intercepted 2 active dispatches (SHJ-101 Gate, SHJ-102 Hospital).</div>
-        <div class="terminal-log-line text-cyan">🔒 Merkle Root Checkpoint intact. Standby for autonomous or operator reconstitution.</div>
+        <div class="terminal-log-line text-cyan">🔒 Merkle Root Checkpoint intact. Standby for autonomous reconstitution.</div>
       `;
       logTerminal.scrollTop = logTerminal.scrollHeight;
     }
@@ -948,7 +696,6 @@ export class AppController {
   triggerAutonomousSelfHealing() {
     const stats = this.resilienceEngine.reconstituteAndSelfHeal(this.activeGrievances, INITIAL_GRIEVANCES);
 
-    // Update UI Indicators
     const badge = document.getElementById('storage-health-badge');
     const badgeText = document.getElementById('storage-health-text');
     const metricRecords = document.getElementById('metric-primary-records');
@@ -1016,29 +763,28 @@ export class AppController {
     const isFake = result.verdict === "DEBUNKED_FALSE_RUMOR";
 
     container.innerHTML = `
-      <div class="truth-result-header ${isFake ? 'result-fake' : 'result-verified'}">
-        <div class="truth-badge-pill ${isFake ? 'badge-fake' : 'badge-true'}">
-          ${this.currentLanguage === "mr" ? result.truthBadgeMr : result.truthBadge}
+      <div style="background:#161019; border:1px solid ${isFake ? '#EF4444' : '#7ED957'}; border-radius:8px; padding:14px; margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="background:${isFake ? 'rgba(239,68,68,0.2)' : 'rgba(126,217,87,0.2)'}; color:${isFake ? '#FCA5A5' : '#7ED957'}; font-family:var(--font-mono); font-size:11px; font-weight:800; padding:3px 10px; border-radius:999px;">
+            ${this.currentLanguage === "mr" ? result.truthBadgeMr : result.truthBadge}
+          </span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:#C5BFCC;">Confidence: ${result.confidenceScore}%</span>
         </div>
-        <span class="truth-confidence">Confidence: ${result.confidenceScore}%</span>
-      </div>
-      <h4 class="truth-result-title">${this.currentLanguage === "mr" ? (result.titleMr || result.title) : result.title}</h4>
-      <p class="truth-result-desc">${this.currentLanguage === "mr" ? (result.officialExplanationMr || result.officialExplanation) : result.officialExplanation}</p>
-      
-      <div class="truth-telemetry-strip">
-        ${Object.entries(result.labTelemetry || {}).map(([k, v]) => `
-          <div class="telemetry-chip">
-            <span class="chip-key">${k}:</span>
-            <strong class="chip-val">${v}</strong>
-          </div>
-        `).join('')}
-      </div>
+        <h4 style="font-size:14px; font-weight:800; color:#FFFFFF; margin-bottom:4px;">${this.currentLanguage === "mr" ? (result.titleMr || result.title) : result.title}</h4>
+        <p style="font-size:12.5px; color:#C5BFCC; line-height:1.45; margin-bottom:10px;">${this.currentLanguage === "mr" ? (result.officialExplanationMr || result.officialExplanation) : result.officialExplanation}</p>
+        
+        <div style="display:flex; gap:8px; flex-wrap:wrap; background:#0B070D; padding:8px 10px; border-radius:6px; margin-bottom:10px;">
+          ${Object.entries(result.labTelemetry || {}).map(([k, v]) => `
+            <div style="font-size:11px; color:#8E8695;">${k}: <strong style="color:#38BDF8;">${v}</strong></div>
+          `).join('')}
+        </div>
 
-      <div class="truth-footer-row">
-        <div class="authority-tag">🏛️ Authority: <strong>${result.sourceAuthority}</strong></div>
-        <button id="btn-copy-wa-share" class="btn-copy-wa">
-          <span>📲</span> Copy WhatsApp Debunk
-        </button>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+          <div style="font-size:11px; color:#C5BFCC;">Authority: <strong style="color:#F5B814;">${result.sourceAuthority}</strong></div>
+          <button id="btn-copy-wa-share" style="background:#25D366; color:#000000; border:none; font-weight:700; font-size:11px; padding:6px 12px; border-radius:4px; cursor:pointer;">
+            <span>📲</span> Copy WhatsApp Debunk
+          </button>
+        </div>
       </div>
     `;
 
@@ -1063,9 +809,93 @@ export class AppController {
       statusMsg.className = "sybil-status-text text-amber";
       statusMsg.innerHTML = `
         🚨 <strong>Sybil Attack Neutralized:</strong> ${report.flaggedAsFakeOrCoordinated} coordinated fake requests isolated into forensic sandbox.
-        <br><span class="text-green">✔ Genuine farmer queue remains 100% unaffected. Security event sealed in SHA-256 ledger.</span>
+        <br><span style="color:#7ED957;">✔ Genuine farmer queue remains 100% unaffected. Security event sealed in SHA-256 ledger.</span>
       `;
     }
     this.renderAuditLedger();
+  }
+
+  triggerCascadeSimulation() {
+    this.isCascading = true;
+    this.cascadeEngine.simulateBreach("N3"); // Distributary D-2
+    this.cascadeRenderer.setData(this.cascadeEngine.graph, true);
+
+    const statusText = document.getElementById('cascade-status-text');
+    const statusDot = document.getElementById('cascade-status-dot');
+    if (statusText) statusText.innerText = "CRITICAL BREACH: D-2 Siphon Silting Jam (38% Loss)";
+    if (statusDot) statusDot.className = "status-dot dot-red";
+
+    const banner = document.getElementById('cascade-alert-banner');
+    if (banner) {
+      banner.style.display = "block";
+      banner.className = "alert-banner danger";
+      banner.innerHTML = `
+        <strong>🚨 HYDRAULIC BREACH DETECTED:</strong> Distributary D-2 Siphon Silt Jam.
+        Conveyance loss surging to 38%. Sluice Patrol Squad C3 dispatched with Excavator EX-01 to protect downstream Ward 5 orchards.
+      `;
+    }
+  }
+
+  resetCascadeSimulation() {
+    this.isCascading = false;
+    this.cascadeEngine.resetGraph();
+    this.cascadeRenderer.setData(this.cascadeEngine.graph, false);
+
+    const statusText = document.getElementById('cascade-status-text');
+    const statusDot = document.getElementById('cascade-status-dot');
+    if (statusText) statusText.innerText = "Hydraulics Nominal (3.2 m/s)";
+    if (statusDot) statusDot.className = "status-dot dot-green";
+
+    const banner = document.getElementById('cascade-alert-banner');
+    if (banner) banner.style.display = "none";
+  }
+
+  handleCascadeNodeSelected(node) {
+    if (!node) return;
+    alert(`Hydraulic Asset Selected: ${node.name}\nType: ${node.type}\nCapacity: ${node.capacityCusecs || 0} Cusecs\nStatus: ${node.status}`);
+  }
+
+  openOverrideModal() {
+    const modal = document.getElementById('override-modal');
+    const select = document.getElementById('override-issue-select');
+    if (!modal || !select || !this.currentTriageResult) return;
+
+    select.innerHTML = this.currentTriageResult.allScored.map(i => `
+      <option value="${i.id}">${i.id}: ${i.title} (${i.wardName})</option>
+    `).join("");
+
+    modal.style.display = "flex";
+
+    const btnClose = document.getElementById('btn-modal-close');
+    const btnCancel = document.getElementById('btn-modal-cancel');
+    const btnConfirm = document.getElementById('btn-modal-confirm');
+
+    const closeModal = () => { modal.style.display = "none"; };
+    if (btnClose) btnClose.onclick = closeModal;
+    if (btnCancel) btnCancel.onclick = closeModal;
+
+    if (btnConfirm) {
+      btnConfirm.onclick = () => {
+        const issueId = select.value;
+        const officer = document.getElementById('override-officer-input').value;
+        const reason = document.getElementById('override-reason-input').value;
+
+        if (!reason.trim()) {
+          alert("Mandatory statutory justification required under RTI Act Section 4(1)(b).");
+          return;
+        }
+
+        this.auditLedger.addBlock(
+          "OFFICER_STAGE_GATE_OVERRIDE",
+          officer,
+          { elevatedIssueId: issueId, reason },
+          `Officer override authorized: Elevated ${issueId} to Batch 1 under emergency powers. Justification: ${reason}`
+        );
+
+        alert(`✅ Override committed to SHA-256 Audit Ledger for ${issueId}.`);
+        closeModal();
+        this.runTriageCycle();
+      };
+    }
   }
 }
