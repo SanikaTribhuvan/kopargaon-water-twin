@@ -14,27 +14,6 @@
 </head>
 <body class="site-body">
 
-  <!-- A. ONE-TIME SPLASH GATE (First Load Overlay) -->
-  <div id="splash-gate" class="splash-gate-overlay" aria-modal="true" role="dialog">
-    <div class="splash-content-box">
-      <div class="splash-brand-mark">
-        <h1 class="splash-title">KOPARGAON<span class="splash-accent">TWIN</span></h1>
-      </div>
-      <p class="splash-subtitle">Godavari Left Bank Canal Rotational Decision Engine v3.0</p>
-      
-      <button id="btn-enter-twin" class="splash-gold-btn" aria-label="Enter Digital Twin">
-        <span>ENTER DIGITAL TWIN</span>
-        <span class="btn-arrow">→</span>
-      </button>
-
-      <div class="splash-footer-legal">
-        <span>MAHARASHTRA IRRIGATION ACT 1976</span>
-        <span>•</span>
-        <span>RTI ACT 2005 SEC 4(1)(b)</span>
-      </div>
-    </div>
-  </div>
-
   <!-- PERSISTENT FLOATING SHORTCUT BUTTON -->
   <button id="floating-sparkle-btn" class="floating-terracotta-sparkle" aria-label="Quick Canal Telemetry Highlights" onclick="document.getElementById('section-live-challenges').scrollIntoView({behavior:'smooth'})">
     <span class="sparkle-glyph">LIVE</span>
@@ -178,6 +157,7 @@
       <video
         id="hero-bg-video"
         class="hero-video-element"
+        src="./website-video.mp4"
         autoplay
         loop
         muted
@@ -185,9 +165,9 @@
         preload="auto"
       >
         <source src="./website-video.mp4" type="video/mp4" />
+        <source src="./website video.mp4" type="video/mp4" />
         <source src="/website-video.mp4" type="video/mp4" />
         <source src="./hero-flythrough.mp4" type="video/mp4" />
-        <source src="/hero-flythrough.mp4" type="video/mp4" />
       </video>
       <div class="hero-gradient-overlay"></div>
       <div class="hero-grid-lines"></div>
