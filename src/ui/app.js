@@ -79,52 +79,30 @@ export class AppController {
 
     this.videoElement.muted = true;
     this.videoElement.playsInline = true;
+    this.videoElement.autoplay = true;
+    this.videoElement.loop = true;
 
-    const heroSection = document.getElementById('hero-section');
-    if (!heroSection) return;
+    const tryPlay = () => {
+      const playPromise = this.videoElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Retry on first user interaction if browser policy requires it
+          document.addEventListener('click', () => {
+            this.videoElement.play().catch(() => {});
+          }, { once: true });
+        });
+      }
+    };
 
-    let targetTime = 0;
-    let isVideoReady = false;
-
-    this.videoElement.addEventListener('loadedmetadata', () => {
-      isVideoReady = true;
-      this.videoElement.pause();
-    });
-
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-    if (isTouchDevice && window.innerWidth < 768) {
-      this.videoElement.loop = true;
-      this.videoElement.play().catch(() => {});
-      return;
+    if (this.videoElement.readyState >= 2) {
+      tryPlay();
+    } else {
+      this.videoElement.addEventListener('canplay', tryPlay, { once: true });
+      this.videoElement.addEventListener('loadeddata', tryPlay, { once: true });
     }
 
-    const onScroll = () => {
-      if (!isVideoReady || !this.videoElement.duration) return;
-
-      const rect = heroSection.getBoundingClientRect();
-      const totalScrollDistance = heroSection.offsetHeight - window.innerHeight;
-      
-      if (totalScrollDistance <= 0) return;
-
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / totalScrollDistance));
-      targetTime = progress * (this.videoElement.duration || 10);
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    const smoothVideoUpdate = () => {
-      if (isVideoReady && this.videoElement && !this.videoElement.seeking) {
-        const diff = targetTime - this.videoElement.currentTime;
-        if (Math.abs(diff) > 0.04) {
-          this.videoElement.currentTime += diff * 0.18;
-        }
-      }
-      requestAnimationFrame(smoothVideoUpdate);
-    };
-
-    requestAnimationFrame(smoothVideoUpdate);
+    // Ensure fallback play call
+    setTimeout(tryPlay, 300);
   }
 
   initRenderers() {

@@ -17,12 +17,7 @@
   <!-- A. ONE-TIME SPLASH GATE (First Load Overlay) -->
   <div id="splash-gate" class="splash-gate-overlay" aria-modal="true" role="dialog">
     <div class="splash-content-box">
-      <!-- Pixel-Cluster Brand Mark -->
       <div class="splash-brand-mark">
-        <div class="pixel-cluster">
-          <span class="px px-1"></span><span class="px px-2"></span>
-          <span class="px px-3"></span><span class="px px-4"></span>
-        </div>
         <h1 class="splash-title">KOPARGAON<span class="splash-accent">TWIN</span></h1>
       </div>
       <p class="splash-subtitle">Godavari Left Bank Canal Rotational Decision Engine v3.0</p>
@@ -50,10 +45,6 @@
     <div class="header-container">
       <div class="brand-left">
         <a href="#hero-section" class="brand-logo" aria-label="Kopargaon Shejpali Digital Twin Home">
-          <div class="brand-mark">
-            <span class="logo-text-mark">KT</span>
-            <div class="glow-pulse-ring"></div>
-          </div>
           <div class="brand-name-group">
             <span class="brand-title">KOPARGAON<span class="brand-accent">TWIN</span></span>
             <span class="brand-badge-pill">SHEJPALI OS v3.0</span>
@@ -152,11 +143,16 @@
       <video
         id="hero-bg-video"
         class="hero-video-element"
-        src="./public/hero-flythrough.mp4"
+        autoplay
+        loop
         muted
         playsinline
         preload="auto"
-      ></video>
+      >
+        <source src="/hero-flythrough.mp4" type="video/mp4" />
+        <source src="./hero-flythrough.mp4" type="video/mp4" />
+        <source src="./public/hero-flythrough.mp4" type="video/mp4" />
+      </video>
       <div class="hero-gradient-overlay"></div>
       <div class="hero-grid-lines"></div>
 
