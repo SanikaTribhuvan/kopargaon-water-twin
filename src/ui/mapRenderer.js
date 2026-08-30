@@ -82,18 +82,18 @@ export class MapRenderer {
   }
 
   renderCanalAndPipes() {
-    // 1. Godavari River Natural Corridor
+    // 1. Godavari River
     const river = [
-      [19.9050, 74.4620],
-      [19.9010, 74.4710],
-      [19.8960, 74.4810],
+      [19.9070, 74.4580],
+      [19.9010, 74.4720],
+      [19.8965, 74.4840],
       [19.8920, 74.4950]
     ];
     L.polyline(river, {
       color: '#38bdf8',
       weight: 6,
       opacity: 0.65
-    }).bindTooltip("🌊 Godavari River Main Corridor", { sticky: true }).addTo(this.map);
+    }).bindTooltip("Godavari River Main Corridor", { sticky: true }).addTo(this.map);
 
     // 2. Godavari Left Bank Canal (GLBC) Main Channel
     const glbcMain = [
@@ -107,7 +107,7 @@ export class MapRenderer {
       weight: 4.5,
       opacity: 0.9,
       dashArray: '6, 3'
-    }).bindTooltip("💧 Godavari Left Bank Canal (GLBC) - 140 Cfs Awartan", { sticky: true }).addTo(this.map);
+    }).bindTooltip("GLBC Main Canal - 140 Cfs Awartan", { sticky: true }).addTo(this.map);
 
     // 3. Distributary D-4 to Ward 5 Tail Reach
     const distD4 = [
@@ -121,7 +121,7 @@ export class MapRenderer {
       weight: 3.5,
       opacity: 0.85,
       dashArray: '4, 4'
-    }).bindTooltip("🌾 Distributary D-4 & Minor 4B Tail Canal (Laxmi Nagar)", { sticky: true }).addTo(this.map);
+    }).bindTooltip("Distributary D-4 & Minor 4B Tail Canal", { sticky: true }).addTo(this.map);
 
     // 4. Potable Feeder to ESR-2 & Rural Hospital
     const potableFeeder = [
@@ -135,7 +135,7 @@ export class MapRenderer {
       weight: 3,
       opacity: 0.85,
       dashArray: '8, 4'
-    }).bindTooltip("🏥 Hospital & Master ESR-2 Dedicated Potable Line", { sticky: true }).addTo(this.map);
+    }).bindTooltip("Hospital & Master ESR-2 Dedicated Line", { sticky: true }).addTo(this.map);
   }
 
   renderFleet() {
@@ -147,9 +147,9 @@ export class MapRenderer {
     MUNICIPAL_RESOURCES.crews.forEach(crew => {
       const crewIcon = L.divIcon({
         className: 'vehicle-crew-icon',
-        html: `<div class="crew-badge pulse-crew"><span class="icon">👷</span> ${crew.id}</div>`,
-        iconSize: [44, 24],
-        iconAnchor: [22, 12]
+        html: `<div class="crew-badge pulse-crew"><span class="icon">SQUAD</span> ${crew.id}</div>`,
+        iconSize: [64, 24],
+        iconAnchor: [32, 12]
       });
 
       const marker = L.marker(crew.location, { icon: crewIcon }).addTo(this.map);
@@ -167,9 +167,9 @@ export class MapRenderer {
     const pumpLoc = [19.8825, 74.4720];
     const pumpIcon = L.divIcon({
       className: 'vehicle-pump-icon',
-      html: `<div class="tanker-badge" style="background:#0284c7; color:#fff;"><span class="icon">⚙️</span> SJ-01</div>`,
-      iconSize: [52, 24],
-      iconAnchor: [26, 12]
+      html: `<div class="tanker-badge" style="background:#0284c7; color:#fff;"><span class="icon">PUMP</span> SJ-01</div>`,
+      iconSize: [64, 24],
+      iconAnchor: [32, 12]
     });
     const pumpMarker = L.marker(pumpLoc, { icon: pumpIcon }).addTo(this.map);
     pumpMarker.bindPopup(`<strong>Mobile Lift Pump (50 HP)</strong><br/>Location: Minor-4 Tail Sluice`);
@@ -181,20 +181,11 @@ export class MapRenderer {
     this.issueMarkers.forEach(m => this.map.removeLayer(m));
     this.issueMarkers = [];
 
-    const categoryIcons = {
-      agriculture: '🌾',
-      drinking_lifeline: '🏥',
-      drinking_slum: '🚰',
-      canal_breach: '⚠️',
-      drinking_transit: '🚌'
-    };
-
     issues.forEach(issue => {
       const triageItem = activeTriageMap[issue.id];
       const isBatch1 = triageItem && triageItem.allocatedBatch === "BATCH_1";
       const isBatch2 = triageItem && triageItem.allocatedBatch === "BATCH_2";
       const score = triageItem ? triageItem.triageScore : (issue.triageScore || issue.severity);
-      const iconEmoji = categoryIcons[issue.category] || '💧';
 
       let lat = issue.lat;
       let lng = issue.lng;
@@ -212,7 +203,6 @@ export class MapRenderer {
       const html = `
         <div class="issue-map-pin ${isBatch1 ? 'pin-batch1' : (isBatch2 ? 'pin-batch2' : 'pin-pending')}">
           <div class="pin-inner">
-            <span style="font-size:11px;">${iconEmoji}</span>
             <span class="pin-score">${score}</span>
           </div>
           ${isBatch1 ? '<div class="pin-pulse"></div>' : ''}

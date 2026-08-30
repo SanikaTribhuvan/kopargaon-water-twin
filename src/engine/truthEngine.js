@@ -93,8 +93,8 @@ export class TruthEngine {
         matched: true,
         confidenceScore: Math.min(99.4, 75 + maxMatchScore * 10),
         verdict: bestMatch.truthVerdict,
-        truthBadge: bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "🚨 FAKE / MISINFORMATION BUSTED" : "✅ OFFICIALLY VERIFIED FACT",
-        truthBadgeMr: bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "🚨 खोटी बातमी / अफवा खंडन" : "✅ शासकीय अधिकृत सत्य",
+        truthBadge: bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "FAKE / MISINFORMATION BUSTED" : "OFFICIALLY VERIFIED FACT",
+        truthBadgeMr: bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "खोटी बातमी / अफवा खंडन" : "शासकीय अधिकृत सत्य",
         title: bestMatch.title,
         titleMr: bestMatch.titleMr,
         officialExplanation: bestMatch.officialExplanation,
@@ -103,7 +103,7 @@ export class TruthEngine {
         sourceAuthority: bestMatch.sourceAuthority,
         sha256Seal: bestMatch.sha256Seal,
         verificationTimestamp: new Date().toISOString(),
-        shareableWhatsAppText: `⚠️ *SATYA-SETU KOPARGAON FACT CHECK* ⚠️\n\n📌 *Claim:* "${queryText}"\n🔍 *Verdict:* ${bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "❌ 100% FAKE / RUMOR" : "✅ VERIFIED TRUTH"}\n\n🏛️ *Official Authority Statement:* ${bestMatch.officialExplanation}\n\n🔒 *Cryptographic Seal:* ${bestMatch.sha256Seal.substring(0, 16)}...\nVerified by Kopargaon Shejpali Digital Twin.`
+        shareableWhatsAppText: `[SATYA-SETU KOPARGAON FACT CHECK]\n\nClaim: "${queryText}"\nVerdict: ${bestMatch.truthVerdict === "DEBUNKED_FALSE_RUMOR" ? "FAKE / RUMOR BUSTED" : "VERIFIED TRUTH"}\n\nAuthority Statement: ${bestMatch.officialExplanation}\n\nCryptographic Seal: ${bestMatch.sha256Seal.substring(0, 16)}...\nVerified by Kopargaon Shejpali Digital Twin.`
       };
 
       // Log verification to ledger for transparent RTI fact audit

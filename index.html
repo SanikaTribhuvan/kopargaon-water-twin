@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kopargaon Shejpali Water Prioritization Digital Twin | कोपरगाव शेजपाळी जलवाटप डिजिटल ट्विन</title>
+  <title>Kopargaon Shejpali Water Prioritization Digital Twin</title>
   
   <!-- Modern Typography from Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
         </div>
         <h1 class="splash-title">KOPARGAON<span class="splash-accent">TWIN</span></h1>
       </div>
-      <p class="splash-subtitle">Godavari Left Bank Canal Rotational Water Decision Engine · v3.0</p>
+      <p class="splash-subtitle">Godavari Left Bank Canal Rotational Decision Engine v3.0</p>
       
       <button id="btn-enter-twin" class="splash-gold-btn" aria-label="Enter Digital Twin">
         <span>ENTER DIGITAL TWIN</span>
@@ -40,9 +40,9 @@
     </div>
   </div>
 
-  <!-- PERSISTENT FLOATING SPARKLE BUTTON (Terracotta #D89B72) -->
+  <!-- PERSISTENT FLOATING SHORTCUT BUTTON -->
   <button id="floating-sparkle-btn" class="floating-terracotta-sparkle" aria-label="Quick Canal Telemetry Highlights" onclick="document.getElementById('section-live-challenges').scrollIntoView({behavior:'smooth'})">
-    <span class="sparkle-glyph">✦</span>
+    <span class="sparkle-glyph">LIVE</span>
   </button>
 
   <!-- TOP BRAND HEADER -->
@@ -51,32 +51,32 @@
       <div class="brand-left">
         <a href="#hero-section" class="brand-logo" aria-label="Kopargaon Shejpali Digital Twin Home">
           <div class="brand-mark">
-            <span class="logo-symbol">💧</span>
+            <span class="logo-text-mark">KT</span>
             <div class="glow-pulse-ring"></div>
           </div>
           <div class="brand-name-group">
             <span class="brand-title">KOPARGAON<span class="brand-accent">TWIN</span></span>
-            <span class="brand-badge-pill">v3.0 SHEJPALI DIGITAL TWIN</span>
+            <span class="brand-badge-pill">SHEJPALI OS v3.0</span>
           </div>
         </a>
       </div>
 
-      <!-- Quick Nav Jump Links -->
+      <!-- Main Navigation Links -->
       <nav class="header-nav" aria-label="Main Navigation">
-        <a href="#section-modules" class="nav-link">Overview</a>
+        <a href="#section-modules" class="nav-link">Architecture</a>
         <a href="#section-sticky-triage" class="nav-link">Prioritization</a>
-        <a href="#section-gis-network" class="nav-link">Canal Network</a>
+        <a href="#section-gis-network" class="nav-link">Canal GIS</a>
         <a href="#section-hydraulic-cascade" class="nav-link">Hydraulics</a>
         <a href="#section-explainability" class="nav-link">Explainability</a>
         <a href="#section-voice-portal" class="nav-link">Voice Portal</a>
-        <a href="#section-live-challenges" class="nav-link highlight-pill">⚡ Live Challenges</a>
+        <a href="#section-live-challenges" class="nav-link highlight-pill">Live Challenges</a>
         <a href="#section-governance-ledger" class="nav-link">Ledger</a>
       </nav>
 
       <!-- Right Controls -->
       <div class="header-actions">
         <button id="lang-toggle-btn" class="lang-pill-btn" aria-label="Toggle Language">
-          <span class="lang-flag">🇮🇳</span> <span class="lang-label">मराठी (MR)</span>
+          <span class="lang-label">MR / EN</span>
         </button>
         <button id="nav-menu-btn" class="nav-menu-pill" aria-label="Open Navigation Menu">
           <span class="menu-label">Menu</span>
@@ -84,60 +84,60 @@
         </button>
         <a href="#section-sticky-triage" class="cta-pill-btn">
           <span class="btn-dot"></span>
-          <span data-i18n="dispatchBtn">Live Shejpali Triage</span>
+          <span data-i18n="dispatchBtn">Run Shejpali Triage</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- PERSISTENT STATUS STRIP (Sticky under Header) -->
+  <!-- PERSISTENT STATUS STRIP -->
   <aside class="sticky-status-strip" id="persistent-status-strip" aria-label="Live Telemetry Status Strip">
     <div class="status-strip-container">
       <!-- 1. Seasonal Policy Mode Toggle -->
       <div class="status-pill policy-mode-pill">
         <span class="status-dot dot-cyan"></span>
         <label for="seasonal-mode-select" class="visually-hidden">Seasonal Mode</label>
-        <select id="seasonal-mode-select" class="mode-select-strip" aria-label="Irrigation and Seasonal Policy Mode">
+        <select id="seasonal-mode-select" class="mode-select-strip" aria-label="Irrigation Policy Mode">
           <option value="NORMAL">Standard Shejpali Rotation (नियमित शेजपाळी)</option>
-          <option value="SUMMER_DROUGHT">Severe Summer Crisis: Tail-End & Potable Priority</option>
-          <option value="KHARIF_ROTATION">Kharif Canal Awartan (खरीप आवर्तन)</option>
-          <option value="FESTIVAL_PALKHI">Shirdi Palkhi / Godavari Snan Lifeline</option>
+          <option value="SUMMER_DROUGHT">Summer Drought: Tail-End & Potable Priority</option>
+          <option value="KHARIF_ROTATION">Kharif Awartan (खरीप आवर्तन)</option>
+          <option value="FESTIVAL_PALKHI">Festival & Hospital Lifeline Priority</option>
         </select>
       </div>
 
       <!-- 2. Daily Canal Quota -->
       <div class="status-pill" id="pill-quota">
         <span class="status-dot dot-cyan"></span>
-        <span class="pill-title" data-i18n="budgetAvailable">Daily Canal Quota:</span>
-        <span id="ticker-budget-val" class="pill-value val-cyan">66 / 140 Cusecs (47%)</span>
+        <span class="pill-title">Daily Quota:</span>
+        <span id="ticker-budget-val" class="pill-value val-cyan">66 / 140 Cfs (47%)</span>
       </div>
 
       <!-- 3. Canal Sluice Squads -->
       <div class="status-pill" id="pill-squads">
         <span class="status-dot dot-green"></span>
-        <span class="pill-title" data-i18n="crewsAvailable">Canal Sluice Squads:</span>
-        <span id="ticker-crews-val" class="pill-value val-green">0 / 4 Available</span>
+        <span class="pill-title">Patkari Squads:</span>
+        <span id="ticker-crews-val" class="pill-value val-green">4 / 4 Active</span>
       </div>
 
-      <!-- 4. Mobile Lift & Tankers -->
+      <!-- 4. Mobile Equipment -->
       <div class="status-pill" id="pill-tankers">
         <span class="status-dot dot-amber"></span>
-        <span class="pill-title" data-i18n="equipmentAvailable">Mobile Lift & Tankers:</span>
-        <span id="ticker-equip-val" class="pill-value val-amber">0 / 5 Ready</span>
+        <span class="pill-title">Emergency Units:</span>
+        <span id="ticker-equip-val" class="pill-value val-amber">5 / 5 Ready</span>
       </div>
 
-      <!-- 5. Farmer Trust & Transparency Index -->
+      <!-- 5. Farmer Trust Index -->
       <div class="status-pill" id="pill-trust">
         <span class="status-dot dot-green"></span>
-        <span class="pill-title" data-i18n="trustIndexTitle">Farmer Trust Index:</span>
+        <span class="pill-title">Trust Index:</span>
         <span id="ticker-trust-val" class="pill-value val-green">78/100</span>
       </div>
 
       <!-- 6. Ledger State -->
       <div class="status-pill ledger-pill" id="pill-ledger">
         <span class="status-dot dot-green"></span>
-        <span class="pill-title">Ledger State:</span>
-        <span class="pill-value val-cyan">🔒 SHA-256 Verified (Maji Pauti)</span>
+        <span class="pill-title">Audit Ledger:</span>
+        <span class="pill-value val-cyan">SHA-256 Sealed</span>
       </div>
     </div>
   </aside>
@@ -148,7 +148,7 @@
   <!-- SECTION B: HERO WITH VIDEO SCROLL-SCRUB -->
   <section class="hero-scrub-section" id="hero-section">
     <div class="hero-video-sticky-wrapper">
-      <!-- Full Bleed Scroll Scrubbed Video Background -->
+      <!-- Background Video -->
       <video
         id="hero-bg-video"
         class="hero-video-element"
@@ -160,45 +160,43 @@
       <div class="hero-gradient-overlay"></div>
       <div class="hero-grid-lines"></div>
 
-      <!-- Hero Floating Content (Exact Placement: Giant Headline Top-Left, Support Text Bottom-Right) -->
+      <!-- Hero Content -->
       <div class="hero-content-container">
         <div class="hero-top-left-zone">
           <div class="hero-kicker-badge">
             <span class="badge-ring"></span>
-            <span class="badge-text">MAHARASHTRA IRRIGATION ACT 1976 • DIGITAL TWIN OS</span>
+            <span class="badge-text">MAHARASHTRA IRRIGATION ACT 1976 · DIGITAL TWIN OS</span>
           </div>
 
-          <!-- Giant Two-Line Condensed Headline -->
+          <!-- Headline -->
           <h1 class="hero-giant-headline" id="hero-headline">
             FROM CANAL TO CROP,<br>
             <span class="highlight-forest">EVERY DROP</span> ACCOUNTED FOR.
           </h1>
         </div>
 
-        <!-- Separate Bottom-Right Support Text Zone -->
+        <!-- Separate Bottom-Right Support Card -->
         <div class="hero-support-zone">
-          <p class="hero-support-text" data-i18n="kmcHeader">
-            Kopargaon Municipal Council & Godavari Canal Division • Scarce Water Decision OS & Explainable Shejpali Rotation Engine under Maharashtra Irrigation Act 1976.
+          <p class="hero-support-text">
+            AI-driven Godavari canal allocation under the Maharashtra Irrigation Act 1976. Preventing crop wilting with transparent rotational quotas.
           </p>
 
           <div class="hero-cta-row">
             <a href="#section-modules" class="hero-btn-primary">
-              <span>Explore Modules</span>
+              <span>Explore Architecture</span>
               <span class="btn-icon">↓</span>
             </a>
             <a href="#section-sticky-triage" class="hero-btn-secondary">
-              <span>Live Shejpali Triage</span>
-              <span class="btn-icon">⚡</span>
+              <span>Run Triage</span>
+              <span class="btn-icon">→</span>
             </a>
           </div>
         </div>
 
-        <!-- Bottom-Left Scroll Explore Indicator Pill -->
+        <!-- Bottom-Left Scroll Indicator -->
         <div class="hero-scroll-indicator" id="hero-scroll-indicator">
           <div class="scroll-pill-badge">
-            <span class="mouse-icon">
-              <span class="mouse-wheel"></span>
-            </span>
+            <span class="mouse-icon"><span class="mouse-wheel"></span></span>
             <span class="scroll-label">Scroll to Explore Canal Network</span>
           </div>
         </div>
@@ -213,7 +211,7 @@
         <div>
           <div class="section-tag-forest">SYSTEM ARCHITECTURE</div>
           <h2 class="section-title-condensed">Six Core Modules of the Shejpali Twin</h2>
-          <p class="section-subtext">Unified decision pipeline governing scarce Godavari canal discharge from upstream barrage to tail-end orchards.</p>
+          <p class="section-subtext">Unified decision pipeline governing scarce canal discharge from barrage to tail-end orchards.</p>
         </div>
         <div class="carousel-status-pill">
           <span class="status-dot dot-green"></span>
@@ -221,89 +219,89 @@
         </div>
       </div>
 
-      <!-- Phased Carousel Layout: Pinned Thumbnail Left + Horizontal Scroll Track Right -->
+      <!-- Phased Carousel Layout: Pinned Thumbnail Left + Horizontal Track Right -->
       <div class="phased-carousel-container">
         <!-- Pinned Left Preview Thumbnail -->
         <div class="carousel-pinned-preview">
           <div class="preview-card-inner" id="carousel-preview-box">
             <div class="preview-badge-row">
               <span class="preview-badge-num">01</span>
-              <span class="preview-badge-tag">MCDM ENGINE</span>
+              <span class="preview-badge-tag">MCDM OPTIMIZER</span>
             </div>
-            <div class="preview-icon-graphic">⚡</div>
+            <div class="preview-icon-graphic">KNAPSACK</div>
             <h4 class="preview-heading" id="preview-module-title">Prioritization Engine</h4>
-            <p class="preview-desc" id="preview-module-desc">Ranks competing water requests and explains every allocation under statutory constraints.</p>
+            <p class="preview-desc" id="preview-module-desc">Ranks water requests by crop wilting stress and dry intervals within 140 Cfs quota.</p>
             <div class="preview-metrics-strip">
-              <span>140 Cfs Quota</span> • <span>4 Squads</span> • <span>MCDM Knapsack</span>
+              <span>140 Cfs Quota</span> • <span>4 Squads</span> • <span>Multi-Objective Knapsack</span>
             </div>
           </div>
         </div>
 
         <!-- Horizontal Scroll Cards Track -->
         <div class="carousel-cards-track" id="carousel-cards-track">
-          <!-- 01 Prioritization Engine -->
-          <div class="carousel-card active" data-mod-idx="01" data-mod-title="Prioritization Engine" data-mod-desc="Ranks competing water requests, explains every decision under statutory constraints." data-mod-icon="⚡">
+          <!-- 01 Prioritization -->
+          <div class="carousel-card active" data-mod-idx="01" data-mod-title="Prioritization Engine" data-mod-desc="Ranks water requests by crop wilting stress and dry intervals within 140 Cfs quota." data-mod-icon="KNAPSACK">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">01</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">PRIORITIZATION</span> ENGINE</h3>
-            <p class="carousel-card-desc">Ranks competing water requests, explains every decision under statutory constraints.</p>
+            <p class="carousel-card-desc">Ranks water requests by crop wilting stress and dry intervals within 140 Cfs quota.</p>
             <div class="card-track-glow"></div>
           </div>
 
           <!-- 02 Hydraulic Cascade -->
-          <div class="carousel-card" data-mod-idx="02" data-mod-title="Hydraulic Cascade Network" data-mod-desc="Live canal cascade, simulate a breach before it happens with particle propagation." data-mod-icon="🌊">
+          <div class="carousel-card" data-mod-idx="02" data-mod-title="Hydraulic Cascade Network" data-mod-desc="Live canal network physics modeling flow velocity, silting, and breach waves." data-mod-icon="PHYSICS">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">02</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">HYDRAULIC</span> CASCADE</h3>
-            <p class="carousel-card-desc">Live canal cascade, simulate a breach before it happens with particle propagation.</p>
+            <p class="carousel-card-desc">Live canal network physics modeling flow velocity, silting, and breach waves.</p>
             <div class="card-track-glow"></div>
           </div>
 
-          <!-- 03 Explainability & XAI -->
-          <div class="carousel-card" data-mod-idx="03" data-mod-title="Explainability & XAI" data-mod-desc="Why this farmer, not that one, in plain Marathi with SHAP factor breakdown." data-mod-icon="🔍">
+          <!-- 03 Explainability -->
+          <div class="carousel-card" data-mod-idx="03" data-mod-title="Explainability & XAI" data-mod-desc="Generates plain Marathi & English justification with SHAP factor breakdown." data-mod-icon="XAI">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">03</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">EXPLAINABILITY</span> & XAI</h3>
-            <p class="carousel-card-desc">Why this farmer, not that one, in plain language with SHAP factor breakdown.</p>
+            <p class="carousel-card-desc">Generates plain Marathi & English justification with SHAP factor breakdown.</p>
             <div class="card-track-glow"></div>
           </div>
 
           <!-- 04 Voice Portal -->
-          <div class="carousel-card" data-mod-idx="04" data-mod-title="Marathi Voice AI Portal" data-mod-desc="Farmers report water stress by speaking Marathi, not filling forms." data-mod-icon="🎙️">
+          <div class="carousel-card" data-mod-idx="04" data-mod-title="Marathi Voice Portal" data-mod-desc="Accepts spoken dialect grievances and extracts agricultural stress telemetry." data-mod-icon="NLP">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">04</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">VOICE</span> PORTAL</h3>
-            <p class="carousel-card-desc">Farmers report water stress by speaking Marathi, not filling forms, powered by NLP.</p>
+            <p class="carousel-card-desc">Accepts spoken dialect grievances and extracts agricultural stress telemetry.</p>
             <div class="card-track-glow"></div>
           </div>
 
           <!-- 05 Audit Ledger -->
-          <div class="carousel-card" data-mod-idx="05" data-mod-title="Cryptographic Audit Ledger" data-mod-desc="Every ruling sealed the moment it's made, tamper-evident SHA-256 Maji Pauti blockchain." data-mod-icon="🔒">
+          <div class="carousel-card" data-mod-idx="05" data-mod-title="Cryptographic Audit Ledger" data-mod-desc="Tamper-evident SHA-256 Maji Pauti blockchain for automated RTI compliance." data-mod-icon="LEDGER">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">05</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">AUDIT</span> LEDGER</h3>
-            <p class="carousel-card-desc">Every ruling sealed the moment it's made, tamper-evident cryptographic blockchain.</p>
+            <p class="carousel-card-desc">Tamper-evident SHA-256 Maji Pauti blockchain for automated RTI compliance.</p>
             <div class="card-track-glow"></div>
           </div>
 
           <!-- 06 Historical Simulator -->
-          <div class="carousel-card" data-mod-idx="06" data-mod-title="Historical Policy Simulator" data-mod-desc="Replay past droughts under different priority rules to evaluate crop yield resilience." data-mod-icon="⏪">
+          <div class="carousel-card" data-mod-idx="06" data-mod-title="Historical Policy Simulator" data-mod-desc="Replays past drought seasons under custom priority weights to test outcomes." data-mod-icon="SIMULATOR">
             <div class="carousel-card-top">
               <div class="gold-badge-circle">06</div>
               <span class="card-arrow">↗</span>
             </div>
             <h3 class="carousel-card-title"><span class="highlight-green">HISTORICAL</span> SIMULATOR</h3>
-            <p class="carousel-card-desc">Replay past droughts under different priority rules to evaluate crop yield resilience.</p>
+            <p class="carousel-card-desc">Replays past drought seasons under custom priority weights to test outcomes.</p>
             <div class="card-track-glow"></div>
           </div>
         </div>
@@ -316,21 +314,20 @@
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-gold">STICKY SPLIT-SCREEN PRIORITIZATION</div>
+          <div class="section-tag-gold">ROTATIONAL ALLOCATION</div>
           <h2 class="section-title-condensed">Shejpali Prioritization Queue & Dynamic Ward GIS</h2>
-          <p class="section-subtext">Scroll left cards through Batch 1, Batch 2, and Deferred; right pane pins and highlights active canal reaches in real-time.</p>
+          <p class="section-subtext">Scroll through rotation batches on the left; the pinned map updates active canal reaches in real time.</p>
         </div>
         <div class="header-action-group">
           <button id="btn-stage-gate-override" class="action-btn-secondary">
-            <span class="btn-icon">🛡️</span>
-            <span data-i18n="overrideBtn">Stage-Gate Officer Override</span>
+            <span>Officer Stage-Gate Override</span>
           </button>
         </div>
       </div>
 
-      <!-- Two-Pane Layout: Left Pane Scrolls, Right Pane Pinned Sticky -->
+      <!-- Two-Pane Layout -->
       <div class="sticky-split-grid">
-        <!-- Left Pane: Scrolling Stack of Numbered Batch Cards -->
+        <!-- Left Pane: Batch Cards -->
         <div class="split-left-pane">
           <!-- Filter Navigation Tabs -->
           <div class="split-filter-nav">
@@ -340,41 +337,37 @@
             <button class="phase-step-btn" data-phase="deferred">Deferred</button>
           </div>
 
-          <!-- Batch 1 Card Stack (Immediate Dispatch) -->
+          <!-- Batch 1 -->
           <div class="split-batch-card active-batch" id="split-card-b1">
             <div class="batch-card-header">
               <div class="gold-badge-circle">01</div>
               <div class="batch-title-group">
                 <span class="batch-tag-pill tag-green">BATCH 1 · GATES OPEN</span>
-                <h3 class="batch-title">Immediate Sluice Release (48 Cfs Allocated)</h3>
+                <h3 class="batch-title">Immediate Sluice Release (48 Cfs)</h3>
               </div>
             </div>
             <p class="batch-desc">
-              High wilting point criticality and hospital emergency potable lifeline. Minor-4 and intake valves scheduled for immediate morning release.
+              High wilting risk and hospital potable reserve. Minor-4 and intake valves open for morning rotation.
             </p>
-            <div id="split-b1-items-list" class="split-items-sublist">
-              <!-- Rendered via AppController -->
-            </div>
+            <div id="split-b1-items-list" class="split-items-sublist"></div>
           </div>
 
-          <!-- Batch 2 Card Stack (Scheduled Awartan) -->
+          <!-- Batch 2 -->
           <div class="split-batch-card" id="split-card-b2">
             <div class="batch-card-header">
               <div class="gold-badge-circle">02</div>
               <div class="batch-title-group">
-                <span class="batch-tag-pill tag-amber">BATCH 2 · SCHEDULED AWARTAN</span>
-                <h3 class="batch-title">Next Shift Release (14:00 – 18:00 hrs)</h3>
+                <span class="batch-tag-pill tag-amber">BATCH 2 · SCHEDULED</span>
+                <h3 class="batch-title">Afternoon Rotation (14:00 – 18:00 hrs)</h3>
               </div>
             </div>
             <p class="batch-desc">
-              Moderate crop stress (Onions & Cotton) awaiting hydraulic pressure equilibrium on Distributary D-2 and Bet Kopargaon lift scheme.
+              Moderate crop stress (Onion & Cotton) queued following Distributary D-2 pressure stabilization.
             </p>
-            <div id="split-b2-items-list" class="split-items-sublist">
-              <!-- Rendered via AppController -->
-            </div>
+            <div id="split-b2-items-list" class="split-items-sublist"></div>
           </div>
 
-          <!-- Deferred Card Stack (Rotation Hold) -->
+          <!-- Deferred -->
           <div class="split-batch-card" id="split-card-def">
             <div class="batch-card-header">
               <div class="gold-badge-circle">03</div>
@@ -384,23 +377,21 @@
               </div>
             </div>
             <p class="batch-desc">
-              Non-critical head-reach sugarcane with adequate 14-day soil moisture retention. Deferred under Section 28 tail-end equity protection.
+              Head-reach hardy sugarcane with 14-day soil moisture retention, protected under Section 28 equity rules.
             </p>
-            <div id="split-def-items-list" class="split-items-sublist">
-              <!-- Rendered via AppController -->
-            </div>
+            <div id="split-def-items-list" class="split-items-sublist"></div>
           </div>
         </div>
 
-        <!-- Right Pane: Pinned Sticky GIS Map & 3D Canal Render -->
+        <!-- Right Pane: Pinned Map -->
         <div class="split-right-pane-sticky">
           <div class="sticky-map-card">
             <div class="map-sticky-header">
               <div class="header-status-pill">
                 <span class="status-dot dot-cyan"></span>
-                <span id="sticky-map-reach-lbl">PINNED GIS · GODAVARI CANAL NETWORK</span>
+                <span id="sticky-map-reach-lbl">GODAVARI CANAL NETWORK GIS</span>
               </div>
-              <div class="header-quota-badge">140 Cfs Daily Quota</div>
+              <div class="header-quota-badge">140 Cfs Ceiling</div>
             </div>
 
             <!-- Leaflet Map Canvas -->
@@ -408,15 +399,15 @@
               <div id="map-container" class="leaflet-map-canvas"></div>
             </div>
 
-            <!-- Sticky Map Footer with Scroll to Next Batch CTA -->
+            <!-- Footer -->
             <div class="sticky-map-footer">
               <div class="map-quick-legend">
-                <span><strong class="text-cyan">Cyan:</strong> Canal Corridor</span> • 
-                <span><strong class="text-pink">Pink:</strong> Tail Minors</span> • 
-                <span><strong class="text-green">Green:</strong> Potable ESRs</span>
+                <span><strong>Cyan:</strong> GLBC Main</span> • 
+                <span><strong>Pink:</strong> Tail Minors</span> • 
+                <span><strong>Green:</strong> Potable ESRs</span>
               </div>
               <button id="btn-scroll-next-batch" class="btn-scroll-next-pill">
-                <span>Scroll to Next Batch</span>
+                <span>Next Batch</span>
                 <span class="btn-arrow">↓</span>
               </button>
             </div>
@@ -426,9 +417,9 @@
     </div>
   </section>
 
-  <!-- SECTION E: FULL-BLEED PHASE SCREENS (One per Batch State) -->
+  <!-- SECTION E: FULL-BLEED PHASE SCREENS -->
   <section class="section-fullbleed-phases" id="section-phase-screens">
-    <!-- Phase 1 Full-Bleed Screen -->
+    <!-- Phase 1 -->
     <div class="fullbleed-phase-screen phase-screen-1">
       <div class="phase-bg-mesh"></div>
       <div class="content-container phase-screen-content">
@@ -439,9 +430,9 @@
         <h2 class="phase-giant-wordmark">BATCH 1 · GATES OPEN</h2>
         
         <div class="phase-caption-card">
-          <h4 class="caption-title">Ward 5 Minor-4 Sluice Release</h4>
+          <h4 class="caption-title">Ward 5 Minor-4 Sluice Active</h4>
           <p class="caption-text">
-            42 hectares of pomegranate orchards protected from wilting under Section 28 equity mandate. Master ESR-2 hospital reserve refilled at 22 Cusecs.
+            42 hectares of pomegranate orchards protected from terminal wilting. Hospital ESR-2 refilled at 22 Cfs.
           </p>
         </div>
 
@@ -452,7 +443,7 @@
       </div>
     </div>
 
-    <!-- Phase 2 Full-Bleed Screen -->
+    <!-- Phase 2 -->
     <div class="fullbleed-phase-screen phase-screen-2">
       <div class="phase-bg-mesh"></div>
       <div class="content-container phase-screen-content">
@@ -465,7 +456,7 @@
         <div class="phase-caption-card">
           <h4 class="caption-title">Distributary D-2 & Bet Kopargaon</h4>
           <p class="caption-text">
-            Onion seedling nurseries and MIDC agro-industrial supply lines scheduled for 14:00 Awartan rotation following D-2 siphon pressure stabilization.
+            Onion nurseries and agro-industrial lines scheduled for 14:00 rotation after D-2 siphon stabilization.
           </p>
         </div>
 
@@ -476,7 +467,7 @@
       </div>
     </div>
 
-    <!-- Phase 3 Full-Bleed Screen -->
+    <!-- Phase 3 -->
     <div class="fullbleed-phase-screen phase-screen-3">
       <div class="phase-bg-mesh"></div>
       <div class="content-container phase-screen-content">
@@ -489,130 +480,129 @@
         <div class="phase-caption-card">
           <h4 class="caption-title">Head-Reach Sugarcane Conservation</h4>
           <p class="caption-text">
-            Ward 2 Sugarcane deferred due to rich private well backups and low crop moisture stress, saving 45 Cusecs for acute downstream agricultural reaches.
+            Ward 2 Sugarcane deferred due to adequate soil moisture, saving 45 Cfs for acute tail-end crops.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION F: HOTSPOT-ANNOTATED FACILITY VIEW (Five-Ward Starvation Ledger) -->
+  <!-- SECTION F: HOTSPOT FACILITY VIEW (Five-Ward Starvation Ledger) -->
   <section class="section-hotspot-facility" id="section-hotspot-view">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-forest">HOTSPOT ANNOTATED GIS FACILITY VIEW</div>
-          <h2 class="section-title-condensed">Five-Ward Starvation Ledger & Crop Wilting Hotspots</h2>
-          <p class="section-subtext">Pinpoint agricultural distress across all 5 municipal wards with live tooltip annotations and risk multipliers.</p>
+          <div class="section-tag-forest">HOTSPOT TELEMETRY</div>
+          <h2 class="section-title-condensed">Five-Ward Crop Wilting & Starvation Index</h2>
+          <p class="section-subtext">Agricultural distress and potable security scores across all 5 municipal wards.</p>
         </div>
         <div class="header-action-group">
           <button class="btn-green-phone" onclick="document.getElementById('section-sticky-triage').scrollIntoView({behavior:'smooth'})">
-            <span>📞</span>
-            <span>Get in Touch / Sluice Dispatch</span>
+            <span>Sluice Dispatch Center</span>
           </button>
         </div>
       </div>
 
-      <!-- Hotspot Cards Grid -->
+      <!-- Hotspots Grid -->
       <div class="hotspots-card-grid">
-        <!-- Pin 1: Ward 5 -->
+        <!-- Pin 1 -->
         <div class="hotspot-pin-card pin-critical">
           <div class="hotspot-pin-header">
-            <span class="pin-badge">PIN 01 · TAIL-END MINOR 4</span>
-            <span class="pin-score-pill">Neglect: 89/100</span>
+            <span class="pin-badge">PIN 01 · TAIL MINOR 4</span>
+            <span class="pin-score-pill">Stress: 89/100</span>
           </div>
           <h3 class="pin-title">Ward 5: Laxmi Nagar / Ganeshnagar</h3>
           <div class="pin-tooltip-pill">
             <span class="tooltip-dot dot-red"></span>
-            <span>42 Ha Pomegranates at Fruit-Drop Wilting Threshold (38 Days Dry)</span>
+            <span>42 Ha Pomegranates at Wilting Point (38 Days Dry)</span>
           </div>
           <div class="pin-meta-footer">
-            <span>Tail-End Reach</span> • <span>Vulnerability: 0.96</span> • <span>410 Hectares</span>
+            <span>Tail Reach</span> • <span>Vulnerability: 0.96</span> • <span>410 Ha</span>
           </div>
         </div>
 
-        <!-- Pin 2: Ward 1 -->
+        <!-- Pin 2 -->
         <div class="hotspot-pin-card pin-high">
           <div class="hotspot-pin-header">
-            <span class="pin-badge">PIN 02 · TAIL-END MINOR 1</span>
-            <span class="pin-score-pill">Neglect: 74/100</span>
+            <span class="pin-badge">PIN 02 · TAIL MINOR 1</span>
+            <span class="pin-score-pill">Stress: 74/100</span>
           </div>
           <h3 class="pin-title">Ward 1: Godavari Ghat / Bet Kopargaon</h3>
           <div class="pin-tooltip-pill">
             <span class="tooltip-dot dot-amber"></span>
-            <span>Vegetable & Onion Nursery in Sandy Soil (22 Days Interval)</span>
+            <span>Onion Nursery in Sandy Soil (22 Days Dry)</span>
           </div>
           <div class="pin-meta-footer">
-            <span>Tail-End Reach</span> • <span>Vulnerability: 0.79</span> • <span>340 Hectares</span>
+            <span>Tail Reach</span> • <span>Vulnerability: 0.79</span> • <span>340 Ha</span>
           </div>
         </div>
 
-        <!-- Pin 3: Ward 7 -->
+        <!-- Pin 3 -->
         <div class="hotspot-pin-card pin-secure">
           <div class="hotspot-pin-header">
-            <span class="pin-badge">PIN 03 · HEAD-REACH LIFELINE</span>
+            <span class="pin-badge">PIN 03 · HEAD REACH</span>
             <span class="pin-score-pill">Security: 100%</span>
           </div>
-          <h3 class="pin-title">Ward 7: Tilak Nagar / Rural Hospital</h3>
+          <h3 class="pin-title">Ward 7: Tilak Nagar / Hospital</h3>
           <div class="pin-tooltip-pill">
             <span class="tooltip-dot dot-green"></span>
-            <span>100-Bed Hospital Master ESR-2 ICU & Dialysis Water Security</span>
+            <span>100-Bed Hospital ESR-2 Dialysis & ICU Lifeline</span>
           </div>
           <div class="pin-meta-footer">
-            <span>Head-Reach</span> • <span>Lifeline Priority</span> • <span>120 Hectares</span>
+            <span>Head Reach</span> • <span>Lifeline Priority</span> • <span>120 Ha</span>
           </div>
         </div>
 
-        <!-- Pin 4: Ward 3 -->
+        <!-- Pin 4 -->
         <div class="hotspot-pin-card pin-medium">
           <div class="hotspot-pin-header">
             <span class="pin-badge">PIN 04 · DISTRIBUTARY D-2</span>
-            <span class="pin-score-pill">Neglect: 38/100</span>
+            <span class="pin-score-pill">Stress: 38/100</span>
           </div>
-          <h3 class="pin-title">Ward 3: Samata Nagar / Somaiya Belt</h3>
+          <h3 class="pin-title">Ward 3: Samata Nagar / Somaiya</h3>
           <div class="pin-tooltip-pill">
             <span class="tooltip-dot dot-cyan"></span>
-            <span>D-2 Aqueduct Siphon Crossing & Silt Maintenance Zone</span>
+            <span>D-2 Siphon Aqueduct Silt Inspection Zone</span>
           </div>
           <div class="pin-meta-footer">
-            <span>Middle Reach</span> • <span>Vulnerability: 0.58</span> • <span>280 Hectares</span>
+            <span>Middle Reach</span> • <span>Vulnerability: 0.58</span> • <span>280 Ha</span>
           </div>
         </div>
 
-        <!-- Pin 5: Ward 2 -->
+        <!-- Pin 5 -->
         <div class="hotspot-pin-card pin-low">
           <div class="hotspot-pin-header">
-            <span class="pin-badge">PIN 05 · HEAD-REACH D-1</span>
-            <span class="pin-score-pill">Neglect: 22/100</span>
+            <span class="pin-badge">PIN 05 · HEAD REACH D-1</span>
+            <span class="pin-score-pill">Stress: 22/100</span>
           </div>
-          <h3 class="pin-title">Ward 2: Bazar Peth / Commercial Core</h3>
+          <h3 class="pin-title">Ward 2: Bazar Peth / Core</h3>
           <div class="pin-tooltip-pill">
             <span class="tooltip-dot dot-muted"></span>
-            <span>Head-Reach Sugarcane (Received Water 14 Days Ago, Hardy Crop)</span>
+            <span>Sugarcane on 14-Day Moisture Hold</span>
           </div>
           <div class="pin-meta-footer">
-            <span>Head-Reach</span> • <span>Low Vulnerability</span> • <span>45 Hectares</span>
+            <span>Head Reach</span> • <span>Low Stress</span> • <span>45 Ha</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION G & H: RAW LAND BOUNDARY & GHOSTED CYAN PIPE NETWORK OVERLAY -->
+  <!-- SECTION G & H: RAW LAND BOUNDARY & GHOSTED PIPE OVERLAY -->
   <section class="section-land-pipes" id="section-land-pipes">
     <div class="content-container">
       <div class="section-head-row">
         <div>
           <div class="section-tag-gold">INFRASTRUCTURE VISUALIZATION</div>
-          <h2 class="section-title-condensed">Raw Land Parcels & Ghosted Pipe-Network Overlay</h2>
-          <p class="section-subtext">Toggle between undeveloped terrain parcel boundaries and the live glowing cyan-blue hydraulic infrastructure network.</p>
+          <h2 class="section-title-condensed">Land Parcels & Canal Pipe Overlay</h2>
+          <p class="section-subtext">Toggle between raw cadastral parcel boundaries and the live canal flow network.</p>
         </div>
         <div class="view-toggle-pills">
           <button id="btn-toggle-raw-land" class="toggle-pill-btn active">
-            <span>📐</span> Raw Land Boundary (State G)
+            <span>Raw Land Boundary (State G)</span>
           </button>
           <button id="btn-toggle-pipes" class="toggle-pill-btn">
-            <span>🌊</span> Ghosted Pipe Network (State H)
+            <span>Ghosted Pipe Network (State H)</span>
           </button>
         </div>
       </div>
@@ -622,10 +612,10 @@
           <div class="canvas-overlay-content">
             <div class="overlay-badge">
               <span class="status-dot dot-cyan"></span>
-              <span id="land-pipes-status-txt">GHOSTED PIPE NETWORK · ACTIVE FLOW SIMULATION</span>
+              <span id="land-pipes-status-txt">GHOSTED PIPE NETWORK · ACTIVE FLOW</span>
             </div>
             <div class="overlay-pipe-stats">
-              <div class="pstat-item"><span class="pstat-val">24.8 km</span><span class="pstat-lbl">GLBC Main Conduit</span></div>
+              <div class="pstat-item"><span class="pstat-val">24.8 km</span><span class="pstat-lbl">Main Conduit</span></div>
               <div class="pstat-item"><span class="pstat-val">4 Sluices</span><span class="pstat-lbl">Active Telemetry</span></div>
               <div class="pstat-item"><span class="pstat-val">34 ML</span><span class="pstat-lbl">Daily Discharge</span></div>
             </div>
@@ -635,33 +625,30 @@
     </div>
   </section>
 
-  <!-- SECTION I: PHASE STEPPER CARD (Floated Over Hydraulic Network) -->
+  <!-- SECTION I: PHASE STEPPER & HYDRAULIC GRAPH -->
   <section class="section-hydraulic-cascade" id="section-hydraulic-cascade">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-gold">HYDRAULIC NETWORK & PARTICLE CASCADE</div>
-          <h2 class="section-title-condensed">Live Hydraulic Graph & Sluice Breach Simulation</h2>
-          <p class="section-subtext">Physics-based particle cascade modeling flow velocity, Manning roughness, and breach wave propagation.</p>
+          <div class="section-tag-gold">HYDRAULIC SIMULATION</div>
+          <h2 class="section-title-condensed">Live Hydraulic Network & Sluice Breach Physics</h2>
+          <p class="section-subtext">Physics model tracking flow velocity, Manning roughness, and canal breach waves.</p>
         </div>
         <div class="header-action-group">
           <button id="btn-sim-cascade" class="action-btn-danger">
-            <span class="btn-icon">💥</span>
             <span>Simulate D-2 Sluice Breach</span>
           </button>
           <button id="btn-reset-cascade" class="action-btn-secondary">
-            <span class="btn-icon">🔄</span>
-            <span>Reset Physics</span>
+            <span>Reset Flow</span>
           </button>
         </div>
       </div>
 
       <div class="cascade-grid-layout">
-        <!-- Live Particle Canvas Container -->
+        <!-- Live Particle Canvas -->
         <div class="nrg-card-shell cascade-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">🌊</span>
               <h3 class="card-heading">Godavari Left Bank Canal Flow Simulation</h3>
             </div>
             <div class="cascade-status-badge">
@@ -675,55 +662,53 @@
           </div>
         </div>
 
-        <!-- Section I: White Rounded Stepper Card Floated Over Section -->
+        <!-- Section I: White Stepper Card -->
         <div class="stepper-white-card" id="section-phase-stepper-card">
           <div class="stepper-card-header">
             <h3 class="stepper-title">Canal Sluice Sequence</h3>
-            <span class="stepper-sub">Awartan Cycle Phase Stepper</span>
+            <span class="stepper-sub">Awartan Rotation Stage Stepper</span>
           </div>
 
           <div class="stepper-rows-stack">
-            <!-- Step 1: Completed -->
+            <!-- Step 1 -->
             <div class="stepper-row completed">
-              <div class="step-num-circle"><span class="check-icon">✓</span></div>
+              <div class="step-num-circle"><span class="check-glyph">OK</span></div>
               <div class="step-details">
-                <strong class="step-name">1: Godavari Barrage Intake Sluice</strong>
-                <span class="step-desc">140 Cfs steady discharge verified with upstream sensor</span>
+                <strong class="step-name">1: Barrage Intake Sluice</strong>
+                <span class="step-desc">140 Cfs steady discharge verified with upstream sensors</span>
               </div>
             </div>
 
-            <!-- Step 2: Active -->
+            <!-- Step 2 -->
             <div class="stepper-row active">
               <div class="step-num-circle">2</div>
               <div class="step-details">
                 <strong class="step-name">2: Distributary D-2 Sluice Gate</strong>
-                <span class="step-desc">Awartan diversion active • Silt telemetry monitoring</span>
+                <span class="step-desc">Awartan diversion active • Silt telemetry nominal</span>
               </div>
             </div>
 
-            <!-- Step 3: Upcoming -->
+            <!-- Step 3 -->
             <div class="stepper-row upcoming">
               <div class="step-num-circle">3</div>
               <div class="step-details">
                 <strong class="step-name">3: Minor-4 Tail Reach Sluice</strong>
-                <span class="step-desc">Awaiting pressure head stabilization for Ward 5</span>
+                <span class="step-desc">Pressure head stabilization for Ward 5 orchards</span>
               </div>
             </div>
 
-            <!-- Step 4: Upcoming -->
+            <!-- Step 4 -->
             <div class="stepper-row upcoming">
               <div class="step-num-circle">4</div>
               <div class="step-details">
-                <strong class="step-name">4: Field Chak Outlets & Orchards</strong>
+                <strong class="step-name">4: Field Outlets & Chak Dispatches</strong>
                 <span class="step-desc">Final distribution to 34 smallholder farmer associations</span>
               </div>
             </div>
           </div>
 
-          <!-- Anchored Green Action Button -->
           <div class="stepper-card-action">
-            <button class="btn-green-phone full-width" onclick="alert('Squad 1 (Patkari Santosh Shinde) notified for Sluice Gate inspection.')">
-              <span>📞</span>
+            <button class="btn-green-phone full-width" onclick="alert('Patkari Santosh Shinde dispatched for Sluice Gate inspection.')">
               <span>Trigger Sluice Patrol Squad</span>
             </button>
           </div>
@@ -732,14 +717,14 @@
     </div>
   </section>
 
-  <!-- SECTION I.5: LIVE HACKATHON CHALLENGES HUB (CHALLENGE 1 & 2 RESILIENCE & TRUTH SUITE) -->
+  <!-- SECTION I.5: LIVE HACKATHON CHALLENGES HUB -->
   <section class="section-live-challenges" id="section-live-challenges">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-gold">HACKATHON LIVE CHALLENGES RESILIENCY & TRUTH SUITE</div>
+          <div class="section-tag-gold">HACKATHON LIVE CHALLENGES</div>
           <h2 class="section-title-condensed">Autonomous Resilience & Misinformation Defense</h2>
-          <p class="section-subtext">Instant self-healing against mid-operation database wipeout (Challenge 1) & SatyaSetu WhatsApp rumor debunking + anti-Sybil defense (Challenge 2).</p>
+          <p class="section-subtext">Instant recovery from mid-operation DB wipeout and automated WhatsApp rumor debunking.</p>
         </div>
         <div class="header-action-group">
           <span class="live-pulse-badge">
@@ -750,14 +735,13 @@
       </div>
 
       <div class="challenges-grid-layout">
-        <!-- CHALLENGE 1: DATA CORRUPTION & SELF-HEALING STORE -->
+        <!-- CHALLENGE 1 -->
         <div class="challenge-card-shell" id="card-challenge-resilience">
           <div class="challenge-card-header">
             <div class="challenge-title-group">
-              <span class="challenge-icon">💥</span>
               <div>
-                <span class="challenge-pill challenge-c1">CHALLENGE 1: ZERO-LOSS CORRUPTION RECOVERY</span>
-                <h3 class="challenge-heading">Mid-Operation Data Wipeout & Self-Healing Store</h3>
+                <span class="challenge-pill challenge-c1">CHALLENGE 1: ZERO-LOSS RECOVERY</span>
+                <h3 class="challenge-heading">Mid-Operation DB Wipeout & Self-Healing</h3>
               </div>
             </div>
             <div id="storage-health-badge" class="health-badge healthy">
@@ -767,16 +751,16 @@
           </div>
 
           <p class="challenge-desc">
-            Primary storage or sensor log wipes mid-flight during real water dispatches. Dual-Tier Merkle WAL & shadow memory buffer self-heals state instantly with zero permit loss.
+            Primary storage wipes mid-operation. Dual-tier Merkle WAL and shadow memory self-heal state instantly without losing in-flight water permits.
           </p>
 
           <div class="challenge-telemetry-grid">
             <div class="metric-box">
-              <span class="metric-label">Active Records in Primary:</span>
+              <span class="metric-label">Primary Records:</span>
               <strong id="metric-primary-records" class="metric-val text-cyan">8 Active</strong>
             </div>
             <div class="metric-box">
-              <span class="metric-label">In-Flight Quorum Buffer:</span>
+              <span class="metric-label">In-Flight Buffer:</span>
               <strong id="metric-inflight-records" class="metric-val text-amber">0 Pending</strong>
             </div>
             <div class="metric-box">
@@ -785,27 +769,24 @@
             </div>
           </div>
 
-          <!-- Challenge 1 Interactive Action Controls -->
           <div class="challenge-actions-row">
             <button id="btn-simulate-db-wipe" class="btn-danger-challenge">
-              <span>💥</span> Simulate Mid-Operation DB Corruption
+              <span>Simulate DB Corruption</span>
             </button>
             <button id="btn-trigger-self-heal" class="btn-heal-challenge" disabled>
-              <span>⚡</span> Trigger Autonomous Self-Healing
+              <span>Trigger Self-Healing</span>
             </button>
           </div>
 
-          <!-- Live Resilience Terminal Stream -->
           <div class="challenge-mini-terminal" id="terminal-resilience-log">
-            <div class="terminal-log-line text-dim">⚡ system_ready: Merkle WAL active. Shadow Ring Buffer synced to 8 records.</div>
+            <div class="terminal-log-line text-dim">SYSTEM READY: Merkle WAL active. Shadow Ring Buffer synced to 8 records.</div>
           </div>
         </div>
 
-        <!-- CHALLENGE 2: MISINFORMATION & TRUTH ENGINE -->
+        <!-- CHALLENGE 2 -->
         <div class="challenge-card-shell" id="card-challenge-truth">
           <div class="challenge-card-header">
             <div class="challenge-title-group">
-              <span class="challenge-icon">🛡️</span>
               <div>
                 <span class="challenge-pill challenge-c2">CHALLENGE 2: SATYASETU TRUTH ENGINE</span>
                 <h3 class="challenge-heading">WhatsApp Rumor Debunker & Anti-Sybil Defense</h3>
@@ -813,44 +794,43 @@
             </div>
             <div class="health-badge verified">
               <span class="status-dot dot-cyan"></span>
-              <span>PROVENANCE VERIFIED</span>
+              <span>VERIFIED</span>
             </div>
           </div>
 
           <p class="challenge-desc">
-            Debunk viral WhatsApp rumors with official laboratory telemetry & gazettes. Block coordinated fake complaints from hijacking the Shejpali triage queue.
+            Debunk viral canal rumors with official MPCB water quality data and block coordinated fake grievances from skewing the triage queue.
           </p>
 
-          <!-- Interactive WhatsApp Rumor Checker -->
+          <!-- WhatsApp Rumor Selector -->
           <div class="truth-checker-box">
-            <label for="rumor-preset-select" class="form-label">Select Circulating Kopargaon WhatsApp Forward / Rumor:</label>
+            <label for="rumor-preset-select" class="form-label">Select Circulating WhatsApp Rumor:</label>
             <div class="rumor-input-row">
               <select id="rumor-preset-select" class="modal-input">
-                <option value="toxic_water">"Godavari canal water poisoned with toxic industrial chemical from Nashik MIDC, stop irrigation!"</option>
-                <option value="subsidy_fraud">"Government canceled 80% MahaDBT drip irrigation subsidy scheme for Kopargaon, portal is fake!"</option>
-                <option value="canal_closure">"Canal closed indefinitely due to Nilwande dam breach rumor, no water for 3 weeks!"</option>
-                <option value="custom">-- Type / Paste Custom WhatsApp Forward --</option>
+                <option value="toxic_water">"Godavari canal poisoned with toxic chemical from Nashik MIDC, stop irrigation!"</option>
+                <option value="subsidy_fraud">"Government canceled 80% MahaDBT drip subsidy scheme for Kopargaon, portal fake!"</option>
+                <option value="canal_closure">"Canal closed indefinitely due to Nilwande breach rumor, no water for 3 weeks!"</option>
+                <option value="custom">-- Type Custom WhatsApp Forward --</option>
               </select>
               <button id="btn-verify-rumor" class="btn-verify-challenge">
-                <span>🔍</span> Verify Claim
+                <span>Fact-Check</span>
               </button>
             </div>
-            <input type="text" id="custom-rumor-input" class="modal-input" placeholder="Or paste custom WhatsApp text to fact-check..." style="display:none; margin-top:8px;" />
+            <input type="text" id="custom-rumor-input" class="modal-input" placeholder="Paste custom message..." style="display:none; margin-top:8px;" />
           </div>
 
-          <!-- Verification Badge Result Output -->
           <div id="truth-result-container" class="truth-result-card" style="display:none;"></div>
 
-          <!-- Sybil Attack Simulation Control -->
+          <!-- Sybil Attack Simulation -->
           <div class="sybil-sim-box">
             <div class="sybil-header">
-              <span class="sybil-title">🤖 Coordinated Fake Complaint Surge (Sybil Botnet Defense)</span>
+              <span class="sybil-title">Coordinated Fake Grievance Surge (Anti-Sybil Defense)</span>
               <button id="btn-simulate-sybil-attack" class="btn-sybil-test">
-                <span>🧪</span> Inject Coordinated Fake Attack
+                <span>Inject Sybil Attack</span>
               </button>
             </div>
             <div id="sybil-status-msg" class="sybil-status-text text-dim">
-              Anti-Sybil Engine active: Hardware HMAC attestation & 7/12 land parcel dispute checks enabled.
+              Anti-Sybil Engine active: Hardware HMAC and 7/12 land parcel dispute checks enabled.
             </div>
           </div>
         </div>
@@ -858,24 +838,23 @@
     </div>
   </section>
 
-  <!-- SECTION J: EXPLAINABLE AI (XAI) & CONTRASTIVE SHAP REASONING -->
+  <!-- SECTION J: EXPLAINABLE AI (XAI) -->
   <section class="section-explainability-cluster" id="section-explainability">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-gold">EXPLAINABLE AI & SHAP ATTRIBUTIONS</div>
-          <h2 class="section-title-condensed">Plain-Language Reasoning & Factor Attribution</h2>
-          <p class="section-subtext">Demystifying why one farmer's permit is approved before another in plain Marathi and English.</p>
+          <div class="section-tag-gold">EXPLAINABLE AI</div>
+          <h2 class="section-title-condensed">Plain-Language Decision Reasoning</h2>
+          <p class="section-subtext">Clear statutory and agronomic explanation for why every permit is prioritized or deferred.</p>
         </div>
       </div>
 
       <div class="xai-grid-layout">
-        <!-- Selected Issue XAI Breakdown Card -->
+        <!-- Selected Breakdown -->
         <div class="nrg-card-shell xai-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">🧠</span>
-              <h3 class="card-heading" id="xai-selected-title">Permit Decision Breakdown: SHJ-101</h3>
+              <h3 class="card-heading" id="xai-selected-title">Permit Breakdown: SHJ-101</h3>
             </div>
             <span class="badge-outline" id="xai-selected-score">Score: 94.2/100</span>
           </div>
@@ -886,11 +865,10 @@
           </div>
         </div>
 
-        <!-- Contrastive "Why A and Not B" Comparison Card -->
+        <!-- Contrastive Comparison -->
         <div class="nrg-card-shell xai-contrast-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">⚖️</span>
               <h3 class="card-heading">Contrastive Comparison: Farmer A vs Farmer B</h3>
             </div>
             <span class="badge-outline">Counterfactual XAI</span>
@@ -913,23 +891,22 @@
     </div>
   </section>
 
-  <!-- SECTION K: MULTILINGUAL MARATHI VOICE AI PORTAL -->
+  <!-- SECTION K: MULTILINGUAL MARATHI VOICE PORTAL -->
   <section class="section-voice-portal" id="section-voice-portal">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-forest">VOICE ACCESSIBILITY FOR SMALLHOLDERS</div>
-          <h2 class="section-title-condensed">Marathi Voice Grievance & Water Stress Portal</h2>
-          <p class="section-subtext">Farmers report water stress by speaking colloquial Marathi, powered by offline-capable NLP entity extraction.</p>
+          <div class="section-tag-forest">VOICE ACCESSIBILITY</div>
+          <h2 class="section-title-condensed">Marathi Voice Grievance Intake</h2>
+          <p class="section-subtext">Smallholders report water stress in spoken Marathi; NLP extracts crop and location telemetry automatically.</p>
         </div>
       </div>
 
       <div class="voice-grid-layout">
-        <!-- Interactive Mic Card -->
+        <!-- Interactive Mic -->
         <div class="nrg-card-shell voice-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">🎙️</span>
               <h3 class="card-heading">Spoken Marathi Intake</h3>
             </div>
             <span class="badge-outline">Marathi NLP Model v2.4</span>
@@ -937,10 +914,10 @@
 
           <div class="voice-mic-center">
             <button id="btn-voice-record" class="voice-mic-btn" aria-label="Record Marathi Voice Report">
-              <span class="mic-icon">🎙️</span>
+              <span class="mic-text">REC</span>
               <span class="mic-wave-ring"></span>
             </button>
-            <span id="voice-recording-status" class="voice-status-text">Click microphone or select sample below to simulate</span>
+            <span id="voice-recording-status" class="voice-status-text">Click to record or select sample below</span>
           </div>
 
           <div class="voice-presets-row">
@@ -950,54 +927,53 @@
           </div>
         </div>
 
-        <!-- Voice NLP Extracted Telemetry Card -->
+        <!-- Telemetry Output -->
         <div class="nrg-card-shell voice-telemetry-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">⚡</span>
-              <h3 class="card-heading">Parsed Agricultural Telemetry</h3>
+              <h3 class="card-heading">Extracted Telemetry</h3>
             </div>
-            <span class="badge-outline">Structured Extraction</span>
+            <span class="badge-outline">Structured Intake</span>
           </div>
 
           <div id="voice-parsed-output" class="voice-parsed-box">
-            <div class="parsed-item"><span class="p-key">Detected Ward:</span> <strong id="v-ward">Ward 5 (Laxmi Nagar)</strong></div>
-            <div class="parsed-item"><span class="p-key">Crop Stress:</span> <strong id="v-crop">Pomegranate (Critical Wilting)</strong></div>
-            <div class="parsed-item"><span class="p-key">Urgency Index:</span> <strong id="v-urgency">94/100 (Severe Distress)</strong></div>
-            <div class="parsed-item"><span class="p-key">Recommended Action:</span> <strong id="v-action">Allocate 28 Cfs via Minor-4 Sluice</strong></div>
+            <div class="parsed-item"><span class="p-key">Ward:</span> <strong id="v-ward">Ward 5 (Laxmi Nagar)</strong></div>
+            <div class="parsed-item"><span class="p-key">Crop:</span> <strong id="v-crop">Pomegranate (Critical Wilting)</strong></div>
+            <div class="parsed-item"><span class="p-key">Urgency:</span> <strong id="v-urgency">94/100 (High Distress)</strong></div>
+            <div class="parsed-item"><span class="p-key">Action:</span> <strong id="v-action">Allocate 28 Cfs via Minor-4</strong></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION L: CRYPTOGRAPHIC AUDIT LEDGER & EQUITY RADAR -->
+  <!-- SECTION L: CRYPTOGRAPHIC AUDIT LEDGER -->
   <section class="section-governance-audit" id="section-governance-ledger">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-gold">CRYPTOGRAPHIC GOVERNANCE & STATUTORY EQUITY</div>
-          <h2 class="section-title-condensed">Cryptographic Audit Ledger & Tail-End Equity</h2>
-          <p class="section-subtext">Append-only SHA-256 blockchain guarantee under Maharashtra Irrigation Act 1976 Section 28 tail-end equity mandate.</p>
+          <div class="section-tag-gold">GOVERNANCE & TRANSPARENCY</div>
+          <h2 class="section-title-condensed">Cryptographic Audit Ledger & Section 28 Equity</h2>
+          <p class="section-subtext">Append-only SHA-256 blockchain guarantee under Maharashtra Irrigation Act tail-end equity mandate.</p>
         </div>
       </div>
 
       <div class="governance-grid-layout">
-        <!-- Monospace Cryptographic Audit Ledger (Maji Pauti) -->
+        <!-- Monospace Audit Ledger -->
         <div class="terminal-ledger-card">
           <div class="terminal-header-bar">
             <div class="terminal-dots">
               <span class="dot red"></span>
               <span class="dot yellow"></span>
               <span class="dot green"></span>
-              <span class="terminal-title">MAJI_PAUTI_LEDGER_CHAIN // SHA-256 IMMUTABLE</span>
+              <span class="terminal-title">MAJI_PAUTI_LEDGER // SHA-256 IMMUTABLE</span>
             </div>
             <div class="terminal-actions">
               <button id="btn-tamper-test" class="terminal-btn btn-tamper">
-                <span>🧪</span> Simulate Tamper
+                <span>Tamper Test</span>
               </button>
               <button id="btn-export-rti" class="terminal-btn btn-export">
-                <span>📥</span> Export RTI Report
+                <span>Export RTI Report</span>
               </button>
             </div>
           </div>
@@ -1007,14 +983,13 @@
           </div>
         </div>
 
-        <!-- Starvation vs Transparency Radar Chart -->
+        <!-- Radar Chart -->
         <div class="nrg-card-shell radar-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">🎯</span>
-              <h3 class="card-heading">Canal Starvation vs Farmer Transparency Radar</h3>
+              <h3 class="card-heading">Starvation vs Transparency Radar</h3>
             </div>
-            <span class="badge-outline">Section 28 Equity</span>
+            <span class="badge-outline">Section 28 Mandate</span>
           </div>
 
           <div class="radar-canvas-container">
@@ -1022,9 +997,9 @@
           </div>
 
           <div class="section28-mandate-card">
-            <div class="mandate-tag">⚖️ MAHARASHTRA IRRIGATION ACT • SEC 28</div>
+            <div class="mandate-tag">MAHARASHTRA IRRIGATION ACT · SEC 28</div>
             <p>
-              Tail-end minors with high <strong>Canal Starvation</strong> scores receive automatic algorithmic equity boosts to guarantee fair rotational distribution and prevent crop wilting.
+              Tail-end minors receive automatic equity multipliers to guarantee fair rotation and prevent orchard mortality.
             </p>
           </div>
         </div>
@@ -1032,49 +1007,47 @@
     </div>
   </section>
 
-  <!-- SECTION M: HISTORICAL DROUGHT POLICY SIMULATOR -->
+  <!-- SECTION M: HISTORICAL POLICY SIMULATOR -->
   <section class="section-historical-sim" id="section-historical-sim">
     <div class="content-container">
       <div class="section-head-row">
         <div>
-          <div class="section-tag-forest">POLICY SIMULATION & REPLAY</div>
-          <h2 class="section-title-condensed">Shejpali Historical Rotation & Policy Replay</h2>
-          <p class="section-subtext">Replay past monsoon or summer drought canal awartans under altered policy weights to test agricultural yield outcomes retroactively.</p>
+          <div class="section-tag-forest">POLICY SIMULATOR</div>
+          <h2 class="section-title-condensed">Historical Rotation & Policy Replay</h2>
+          <p class="section-subtext">Replay past seasons under altered policy weights to evaluate crop yield resilience.</p>
         </div>
       </div>
 
       <div class="sim-grid-layout">
-        <!-- Historical Scenarios Cards -->
+        <!-- Scenarios -->
         <div class="nrg-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">⏪</span>
               <h3 class="card-heading">Historical Rotation Datasets</h3>
             </div>
           </div>
 
           <div class="scenario-cards-stack">
-            <div class="scenario-card" onclick="alert('Loaded May 2024 Summer Drought Awartan dataset (Tail-end orchard wilting emergency).')">
-              <div class="scenario-badge">☀️ SUMMER CRISIS</div>
-              <h4 class="scenario-title">May 2024 Severe Summer Drought Awartan</h4>
-              <p class="scenario-desc">Canal discharge reduced to 90 Cusecs • Prioritized Ward 5 Pomegranates & Hospital ESR-2.</p>
+            <div class="scenario-card" onclick="alert('Loaded May 2024 Summer Drought Awartan dataset.')">
+              <div class="scenario-badge">SUMMER CRISIS</div>
+              <h4 class="scenario-title">May 2024 Severe Summer Drought</h4>
+              <p class="scenario-desc">90 Cfs canal discharge • Prioritized Ward 5 Pomegranates & Hospital ESR-2.</p>
               <div class="scenario-action">Click to load scenario →</div>
             </div>
 
-            <div class="scenario-card" onclick="alert('Loaded October 2024 Rabi Rotation dataset (High sugarcane & cotton competition).')">
-              <div class="scenario-badge badge-blue">🌾 RABI ROTATION</div>
+            <div class="scenario-card" onclick="alert('Loaded October 2024 Rabi Rotation dataset.')">
+              <div class="scenario-badge badge-blue">RABI ROTATION</div>
               <h4 class="scenario-title">October 2024 Rabi Cash Crop Awartan</h4>
-              <p class="scenario-desc">160 Cusec full canal discharge • Balanced head-reach sugarcane and tail cotton.</p>
+              <p class="scenario-desc">160 Cfs discharge • Balanced head sugarcane and tail cotton.</p>
               <div class="scenario-action">Click to load scenario →</div>
             </div>
           </div>
         </div>
 
-        <!-- Policy Weight Sliders -->
+        <!-- Sliders -->
         <div class="nrg-card-shell">
           <div class="card-shell-header">
             <div class="card-title-group">
-              <span class="card-icon">🎛️</span>
               <h3 class="card-heading">Policy Weight Tuning</h3>
             </div>
             <span class="badge-outline">Dynamic Recalibration</span>
@@ -1083,7 +1056,7 @@
           <div class="slider-controls-stack">
             <div class="slider-group">
               <div class="slider-label-row">
-                <span class="slider-name">Crop Water-Criticality Weight:</span>
+                <span class="slider-name">Crop Criticality Weight:</span>
                 <strong class="slider-val-badge">28%</strong>
               </div>
               <input type="range" class="nrg-slider" min="5" max="50" value="28" />
@@ -1115,14 +1088,13 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-title-group">
-          <span class="modal-icon">🛡️</span>
-          <h3 id="modal-override-title" class="modal-title">Shejpali Stage-Gate Officer Override</h3>
+          <h3 id="modal-override-title" class="modal-title">Stage-Gate Officer Override</h3>
         </div>
         <button id="btn-modal-close" class="modal-close-btn" aria-label="Close modal">✕</button>
       </div>
 
       <p class="modal-desc">
-        Under Maharashtra Irrigation Act governance rules, officers may alter the triage ranking, but <strong>MUST</strong> input a statutory justification permanently committed to the SHA-256 audit ledger.
+        Under statutory governance rules, officers may alter triage rankings only with a formal justification committed to the SHA-256 ledger.
       </p>
 
       <div class="form-group">
@@ -1137,12 +1109,12 @@
 
       <div class="form-group">
         <label for="override-reason-input" class="form-label">Mandatory Statutory Justification (RTI Logged):</label>
-        <textarea id="override-reason-input" class="modal-input" rows="3" placeholder="e.g. Sub-District Hospital dialysis water emergency or critical tail-end tree survival mandate under Section 32."></textarea>
+        <textarea id="override-reason-input" class="modal-input" rows="3" placeholder="e.g. Sub-District Hospital dialysis water emergency or critical tail-end tree survival mandate."></textarea>
       </div>
 
       <div class="modal-actions">
         <button id="btn-modal-cancel" class="btn-cancel">Cancel</button>
-        <button id="btn-modal-confirm" class="btn-confirm">Sign & Commit Override to Blockchain</button>
+        <button id="btn-modal-confirm" class="btn-confirm">Sign & Commit to Blockchain</button>
       </div>
     </div>
   </div>

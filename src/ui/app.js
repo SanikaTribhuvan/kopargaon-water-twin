@@ -391,19 +391,19 @@ export class AppController {
     const scoreClass = item.triageScore >= 80 ? "high" : (item.triageScore >= 60 ? "medium" : "low");
 
     const assignedBadge = item.assignedCrew 
-      ? `<span style="color: #23531F; font-weight:700; font-size:11px;">🚪 ${item.assignedCrew} • 🌊 ${item.appliedDischargeCusecs || 0} cfs</span>` 
+      ? `<span style="color: #23531F; font-weight:700; font-size:11px;">${item.assignedCrew} • ${item.appliedDischargeCusecs || 0} cfs</span>` 
       : `<span style="color: #8E8695; font-size:11px;">Est. Wait: +${Math.round(item.estimatedWaitHours || 12)}h</span>`;
 
     return `
       <div class="split-item-row ${isSelected ? 'selected' : ''}" data-id="${item.id}" style="background:#F7F4EC; border-radius:8px; padding:12px 14px; margin-bottom:8px; cursor:pointer; border-left:3px solid ${isSelected ? '#7ED957' : '#D5CEBF'};">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
           <div>
-            <span style="font-size:10px; color:#23531F; font-weight:700; font-family:var(--font-mono); display:block;">📜 ${item.permitNo || 'PERMIT QUEUED'}</span>
+            <span style="font-size:10px; color:#23531F; font-weight:700; font-family:var(--font-mono); display:block;">${item.permitNo || 'PERMIT QUEUED'}</span>
             <strong style="font-size:13px; color:#1A1420; display:block;">${title}</strong>
           </div>
           <span style="background:#FFFFFF; font-family:var(--font-mono); font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; color:#1A1420; box-shadow:0 2px 6px rgba(0,0,0,0.06);">${item.triageScore}</span>
         </div>
-        <div style="font-size:11px; color:#4A4250; margin-bottom:4px;"><strong>Applicant:</strong> ${applicant} • 📍 ${item.wardName}</div>
+        <div style="font-size:11px; color:#4A4250; margin-bottom:4px;"><strong>Applicant:</strong> ${applicant} • ${item.wardName}</div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
           ${assignedBadge}
           <span class="inspect-xai-link" style="font-size:11px; color:#23531F; font-weight:700; text-decoration:underline;">Inspect XAI →</span>
@@ -531,7 +531,7 @@ export class AppController {
   toggleVoiceRecord() {
     const statusText = document.getElementById('voice-recording-status');
     if (statusText) {
-      statusText.innerText = "🎙️ Listening to Marathi spoken dialect... (Simulating 3s)";
+      statusText.innerText = "Listening to spoken dialect (Simulating 3s)...";
       setTimeout(() => {
         this.simulateVoiceSample(0);
       }, 1500);
@@ -562,7 +562,7 @@ export class AppController {
     dlAnchor.setAttribute("href", dataStr);
     dlAnchor.setAttribute("download", `KMC_SHEJPALI_RTI_REPORT_${Date.now()}.json`);
     dlAnchor.click();
-    alert("✅ Proactive Section 4(1)(b) RTI Audit Certificate exported successfully!");
+    alert("Section 4(1)(b) RTI Audit Certificate exported successfully.");
   }
 
   testTamperDetection() {
@@ -570,7 +570,7 @@ export class AppController {
     const integrity = this.auditLedger.verifyChainIntegrity();
     
     if (!integrity.valid) {
-      alert(`🚨 TAMPER DETECTED BY CRYPTOGRAPHIC LEDGER!\nBroken Block Index: ${integrity.brokenIndex}\nReason: ${integrity.reason}\nBlockchain security preserved.`);
+      alert(`TAMPER DETECTED BY CRYPTOGRAPHIC LEDGER!\nBroken Block Index: ${integrity.brokenIndex}\nReason: ${integrity.reason}\nBlockchain security preserved.`);
     }
     this.renderAuditLedger();
   }
@@ -585,8 +585,8 @@ export class AppController {
     const cfsTotal = 140;
     const cfsPct = Math.round((cfsAllocated / cfsTotal) * 100);
 
-    if (budgetVal) budgetVal.innerText = `${cfsAllocated} / ${cfsTotal} Cusecs (${cfsPct}%)`;
-    if (crewVal) crewVal.innerText = `4 / 4 Available`;
+    if (budgetVal) budgetVal.innerText = `${cfsAllocated} / ${cfsTotal} Cfs (${cfsPct}%)`;
+    if (crewVal) crewVal.innerText = `4 / 4 Active`;
     if (equipVal) equipVal.innerText = `5 / 5 Ready`;
     if (trustVal) {
       const avgTrust = Math.round(Object.values(this.temporalLedger.getTrustIndices()).reduce((a, b) => a + b, 0) / 7);
@@ -599,7 +599,7 @@ export class AppController {
     if (langBtn) {
       const label = langBtn.querySelector('.lang-label');
       if (label) {
-        label.innerText = this.currentLanguage === "en" ? "मराठी (MR)" : "English (EN)";
+        label.innerText = this.currentLanguage === "en" ? "MR / EN" : "EN / MR";
       }
     }
     if (this.mapRenderer) this.mapRenderer.setLanguage(this.currentLanguage);
@@ -683,9 +683,9 @@ export class AppController {
 
     if (logTerminal) {
       logTerminal.innerHTML += `
-        <div class="terminal-log-line text-red">🚨 [CRITICAL_STORAGE_WIPEOUT] Primary database wiped/corrupted mid-operation!</div>
-        <div class="terminal-log-line text-amber">⚡ In-Flight Transaction Buffer intercepted 2 active dispatches (SHJ-101 Gate, SHJ-102 Hospital).</div>
-        <div class="terminal-log-line text-cyan">🔒 Merkle Root Checkpoint intact. Standby for autonomous reconstitution.</div>
+        <div class="terminal-log-line text-red">[CRITICAL_STORAGE_WIPEOUT] Primary database wiped mid-operation.</div>
+        <div class="terminal-log-line text-amber">In-Flight Transaction Buffer intercepted 2 active dispatches (SHJ-101 Gate, SHJ-102 Hospital).</div>
+        <div class="terminal-log-line text-cyan">Merkle Root Checkpoint intact. Standby for autonomous reconstitution.</div>
       `;
       logTerminal.scrollTop = logTerminal.scrollHeight;
     }
@@ -726,8 +726,8 @@ export class AppController {
 
     if (logTerminal) {
       logTerminal.innerHTML += `
-        <div class="terminal-log-line text-green">✅ [SELF_HEALING_SUCCESS] Reconstituted ${stats.recoveredRecords} records in ${stats.reconstitutionLatencyMs}ms.</div>
-        <div class="terminal-log-line text-green">🔒 Cryptographic SHA-256 block committed to Audit Ledger (Zero Data Loss).</div>
+        <div class="terminal-log-line text-green">[SELF_HEALING_SUCCESS] Reconstituted ${stats.recoveredRecords} records in ${stats.reconstitutionLatencyMs}ms.</div>
+        <div class="terminal-log-line text-green">Cryptographic SHA-256 block committed to Audit Ledger (Zero Data Loss).</div>
       `;
       logTerminal.scrollTop = logTerminal.scrollHeight;
     }
@@ -782,7 +782,7 @@ export class AppController {
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
           <div style="font-size:11px; color:#C5BFCC;">Authority: <strong style="color:#F5B814;">${result.sourceAuthority}</strong></div>
           <button id="btn-copy-wa-share" style="background:#25D366; color:#000000; border:none; font-weight:700; font-size:11px; padding:6px 12px; border-radius:4px; cursor:pointer;">
-            <span>📲</span> Copy WhatsApp Debunk
+            <span>Copy Fact-Check</span>
           </button>
         </div>
       </div>
@@ -792,7 +792,7 @@ export class AppController {
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(result.shareableWhatsAppText || result.officialExplanation);
-        alert("✅ Official SatyaSetu WhatsApp Debunk certificate copied to clipboard!");
+        alert("Official SatyaSetu Fact-Check certificate copied to clipboard.");
       });
     }
 
@@ -808,8 +808,8 @@ export class AppController {
     if (statusMsg) {
       statusMsg.className = "sybil-status-text text-amber";
       statusMsg.innerHTML = `
-        🚨 <strong>Sybil Attack Neutralized:</strong> ${report.flaggedAsFakeOrCoordinated} coordinated fake requests isolated into forensic sandbox.
-        <br><span style="color:#7ED957;">✔ Genuine farmer queue remains 100% unaffected. Security event sealed in SHA-256 ledger.</span>
+        <strong>Sybil Attack Neutralized:</strong> ${report.flaggedAsFakeOrCoordinated} coordinated fake requests isolated into forensic sandbox.
+        <br><span style="color:#7ED957;">Genuine farmer queue remains 100% unaffected. Security event sealed in SHA-256 ledger.</span>
       `;
     }
     this.renderAuditLedger();
@@ -830,7 +830,7 @@ export class AppController {
       banner.style.display = "block";
       banner.className = "alert-banner danger";
       banner.innerHTML = `
-        <strong>🚨 HYDRAULIC BREACH DETECTED:</strong> Distributary D-2 Siphon Silt Jam.
+        <strong>HYDRAULIC BREACH DETECTED:</strong> Distributary D-2 Siphon Silt Jam.
         Conveyance loss surging to 38%. Sluice Patrol Squad C3 dispatched with Excavator EX-01 to protect downstream Ward 5 orchards.
       `;
     }
@@ -892,7 +892,7 @@ export class AppController {
           `Officer override authorized: Elevated ${issueId} to Batch 1 under emergency powers. Justification: ${reason}`
         );
 
-        alert(`✅ Override committed to SHA-256 Audit Ledger for ${issueId}.`);
+        alert(`Override committed to SHA-256 Audit Ledger for ${issueId}.`);
         closeModal();
         this.runTriageCycle();
       };
